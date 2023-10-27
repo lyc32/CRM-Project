@@ -20,4 +20,10 @@ public class QuestionToTestController
         System.out.println(qid + " " + tid);
         return this.questionToTestService.getByQuestionIdAndTestId(qid,tid);
     }
+
+    @DeleteMapping("/admin/removeQuestion/{qid}/fromTest/{tid}")
+    public String removeQuestionFromTest(@PathVariable Long qid, @PathVariable Long tid)
+    {
+        return this.questionToTestService.deleteByQuestionIdAndTestId(qid,tid);
+    }
 }

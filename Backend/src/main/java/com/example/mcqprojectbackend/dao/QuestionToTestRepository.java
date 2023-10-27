@@ -11,4 +11,6 @@ public interface QuestionToTestRepository extends JpaRepository<QuestionToTest, 
 {
     // TODO
     Optional<QuestionToTest> findByQuestionIdAndTestId(Long questionId, Long testId);
+    void deleteQuestionToTestByQuestionId(Long qid);
+
 }

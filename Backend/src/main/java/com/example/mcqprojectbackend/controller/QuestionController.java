@@ -27,10 +27,22 @@ public class QuestionController
         return questionService.getAllQuestion();
     }
 
+    @GetMapping("/admin/addQuestion/{qid}/toTest/{sid}")
+    public String addQuestionToSet(@PathVariable Long qid, @PathVariable Long sid)
+    {
+        return questionService.addQuestionToSet(qid,sid);
+    }
+
     @PostMapping("/admin/addNewQuestion")
     public Question addNewQuestion(@RequestBody Question question)
     {
         return questionService.addNewQuestion(question);
+    }
+
+    @PostMapping("/admin/addNewQuestionToSet/{sid}")
+    public String addNewQuestionToSet(@PathVariable Long sid, @RequestBody Question question)
+    {
+        return questionService.addNewQuestionToSet(sid,question);
     }
 
     @PutMapping("/admin/uptateQuestion/{id}")

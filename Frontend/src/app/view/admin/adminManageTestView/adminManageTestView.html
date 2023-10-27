@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row" *ngIf="showMessageView == false && showDeleteConfirmView == false && showRemoveQuestionConfirmView == false && showDeleteQuestionConfirmView == false">
   <!-- Test View-->
   <div class="col-3">
     <div class="row ms-2" >
@@ -11,15 +11,15 @@
         <input type="text"  id="level" value="{{test.level}}" required>
         <div class="row justify-content-end mb-2">
           <div class="col-5">
-            <button type="button" style="background-color: #C44336" >Delete</button>
+            <button type="button" style="background-color: #C44336" (click) = "showDeleteConfirm()">Delete</button>
           </div>
           <div class="col-5">
-            <button type="button" >Update</button>
+            <button type="button" (click)="updateTest()">Update</button>
           </div>
         </div>
       </div>
       <button class="bg-secondary mt-2" (click)="showCreateQuestion()">Create A New Question</button>
-      <button class="bg-secondary mt-2">Add Exist Questions</button>
+      <button class="bg-secondary mt-2" (click)="showExistQuesiton()">Add Exist Questions</button>
     </div>
   </div>
   <!-- Question List -->
@@ -30,13 +30,13 @@
     <div class="modal-content container mt-1" style="height:570px; overflow: auto" *ngIf="questionList.length > 0">
       <div class="modal-content container mt-1" style="width: 400px"  *ngFor="let question of questionList">
         <div class="row border-bottom ms-1 me-2">
-          <div class="col-3 ms-2">
+          <div class="col-1 ms-2">
             <label class="h6">{{'#'+ question.id}}</label><br>
           </div>
-          <div class="col-5 ">
+          <div class="col-6 ">
             <label class="h6">{{question.style}}</label><br>
           </div>
-          <div class="col-3">
+          <div class="col-4">
             <label class="h6">{{"points: " + question.point}}</label><br>
           </div>
         </div>
@@ -46,9 +46,9 @@
           </div>
           <div class="col-3 ms-2 me-2 ">
             <div class="row mt-2">
-              <button class="form-control btn btn-sm btn-outline-success pt-0" style="height:22px" (click)="showCurrentQuestion(question)">VIEW  </button>
-              <button class="form-control btn btn-sm btn-outline-warning pt-0" style="height:22px" >REMOVE</button>
-              <button class="form-control btn btn-sm btn-outline-danger  pt-0" style="height:22px" >DELETE</button>
+              <button class="form-control btn btn-sm btn-outline-success pt-0" style="height:22px" (click)="showCurrentQuestion(question)"      >VIEW  </button>
+              <button class="form-control btn btn-sm btn-outline-warning pt-0" style="height:22px" (click)="showRemoveQuestionConfirm(question)">REMOVE</button>
+              <button class="form-control btn btn-sm btn-outline-danger  pt-0" style="height:22px" (click)="showDeleteQuestionConfirm(question)">DELETE</button>
             </div>
           </div>
         </div>
@@ -75,10 +75,10 @@
           <div class="row" style="min-height: 200px">
             <div class="col-6 border-end">
               <div class="row border-bottom">
-                <label><i class="bi bi-plus-square"><b> Choice</b></i></label>
+                <label><i class="bi bi-plus-square"  (click)="addCurrentChoice()"><b> Choice</b></i></label>
               </div>
               <span *ngFor="let c of currentChoiceList; let i = index" >
-            <input class="me-1" id="{{'currentChoice'+i}}" type="text" style="width:85%;height:20px" value="{{c}}" ><i class="bi bi-dash-square" ></i>
+            <input class="me-1" id="{{'currentChoice'+i}}" type="text" style="width:85%;height:20px" value="{{c}}" (change)="autoSaveCurrentChoice(i)"><i class="bi bi-dash-square" (click)="removeCurrentChoice(i)"></i>
           </span>
 
             </div>
@@ -102,10 +102,10 @@
           <div class="row" style="min-height: 200px">
             <div class="col-6 border-end">
               <div class="row border-bottom">
-                <label><i class="bi bi-plus-square" ><b> Choice</b></i></label>
+                <label><i class="bi bi-plus-square"  (click)="addCurrentChoice()"><b> Choice</b></i></label>
               </div>
               <span *ngFor="let c of currentChoiceList; let i = index" >
-            <input class="me-1" id="{{'currentChoice'+i}}" type="text" style="width:85%;height:20px" value="{{c}}" ><i class="bi bi-dash-square"></i>
+            <input class="me-1" id="{{'currentChoice'+i}}" type="text" style="width:85%;height:20px" value="{{c}}" (change)="autoSaveCurrentChoice(i)"><i class="bi bi-dash-square"  (click)="removeCurrentChoice(i)"></i>
           </span>
             </div>
             <div class="col-6">
@@ -124,7 +124,7 @@
 
         <div class="row justify-content-end">
           <div class="col-3">
-            <button type="button" >Submit</button>
+            <button type="button" (click)="update()">Update</button>
           </div>
         </div>
       </div>
@@ -147,12 +147,12 @@
         </div>
       </div>
       <div class="modal-content container mt-3 mb-3" style="width:600px;min-height:510px" *ngIf="newQuestion.style!=''">
-        <div class="row">
+        <div class="row mt-0">
           <div class="col-2 text-center">
-            <button (click)="removeQuestionType()">Back</button>
+            <button class="btn btn-success btn-sm" (click)="removeQuestionType()"><-</button>
           </div>
           <div class="col-8 text-center">
-            <h2 style="text-align:center;margin:20px 0 5px;">{{newQuestion.style}}</h2>
+            <h4 style="text-align:center;margin:20px 0 5px;">{{'New' + newQuestion.style}}</h4>
           </div>
         </div>
 
@@ -174,7 +174,7 @@
                 <label><i class="bi bi-plus-square" (click)="addChoice()"><b> Choice</b></i></label>
               </div>
               <span *ngFor="let c of choiceList; let i = index" >
-            <input class="me-1" id="{{'choice'+i}}" type="text" style="width:90%;height:20px" value="{{c}}" (change)="autoSaveChoice(i)"><i class="bi bi-dash-square" (click)="removeChoice(i)"></i>
+            <input class="me-1" id="{{'choice'+i}}" type="text" style="width:85%;height:20px" value="{{c}}" (change)="autoSaveChoice(i)"><i class="bi bi-dash-square" (click)="removeChoice(i)"></i>
           </span>
 
             </div>
@@ -200,7 +200,7 @@
                 <label><i class="bi bi-plus-square" (click)="addChoice()"><b> Choice</b></i></label>
               </div>
               <span *ngFor="let c of choiceList; let i = index" >
-            <input class="me-1" id="{{'choice'+i}}" type="text" style="width:90%;height:20px" value="{{c}}" (change)="autoSaveChoice(i)"><i class="bi bi-dash-square" (click)="removeChoice(i)"></i>
+            <input class="me-1" id="{{'choice'+i}}" type="text" style="width:85%;height:20px" value="{{c}}" (change)="autoSaveChoice(i)"><i class="bi bi-dash-square" (click)="removeChoice(i)"></i>
           </span>
 
             </div>
@@ -224,5 +224,85 @@
         </div>
       </div>
     </div>
+    <!-- Exist Question -->
+    <div *ngIf="showAddExistQuesitonView == true">
+      <div class="modal-content container mt-3 mb-3" style="width:600px;min-height:510px">
+        <div class="row mt-0">
+          <div class="col-2 text-center">
+            <button class="btn btn-success btn-sm" (click)="closeExistQuestion()"><-</button>
+          </div>
+          <div class="col-8 text-center">
+            <h4 style="text-align:center;margin:20px 0 5px;">Search Questions</h4>
+          </div>
+        </div>
+        <div class="row mt-0">
+          <div class="col-9"><input class="form-control" id="questionId"></div>
+          <div class="col-3"><button class="btn btn-sm btn-success" (click)="addQuestionIdToSet()">Add</button></div>
+        </div>
+      </div>
+    </div>
+    <!-- No Data -->
+    <div *ngIf="showAddExistQuesitonView == false && showCreateNewQuestionView==false && showEditQuestionView==false">
+      <div class="modal-content container mt-3 mb-3" style="width:600px;min-height:510px" *ngIf="newQuestion.style==''">
+        <h1 class="text-secondary">No Data</h1>
+      </div>
+    </div>
   </div>
+</div>
+
+<!-- Remove Question Confirm View-->
+<div class="row mt-5" *ngIf="showDeleteQuestionConfirmView == true">
+  <div class="modal-content animate container mt-2" style="width: 600px">
+    <div class="row text-center m-4">
+      <label class="h3"><b>Do You Want To Delete This Question?</b></label>
+    </div>
+    <div class="row">
+      <div class="col-6">
+        <button type="button" style="background-color: #C44336" (click)="delete()">Yes</button>
+      </div>
+      <div class="col-6">
+        <button type="button" (click)="closeDeleteQuestionConfirm()">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Remove Question Confirm View-->
+<div class="row mt-5" *ngIf="showRemoveQuestionConfirmView == true">
+  <div class="modal-content animate container mt-2" style="width: 600px">
+    <div class="row text-center m-4">
+      <label class="h3"><b>Do You Want To Remove This Question?</b></label>
+    </div>
+    <div class="row">
+      <div class="col-6">
+        <button type="button" style="background-color: #C44336" (click)="remove()">Yes</button>
+      </div>
+      <div class="col-6">
+        <button type="button" (click)="closeRemoveQuestionConfirm()">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Delete Test Confirm View-->
+<div class="row mt-5" *ngIf="showDeleteConfirmView == true">
+  <div class="modal-content animate container mt-2" style="width: 600px">
+    <div class="row text-center m-4">
+      <label class="h3"><b>Are You Sure To Delete This Test?</b></label>
+    </div>
+    <div class="row">
+      <div class="col-6">
+        <button type="button" style="background-color: #C44336" (click)="deleteTest()">Yes</button>
+      </div>
+      <div class="col-6">
+        <button type="button" (click)="closeDeleteConfirm()">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Message View -->
+<div *ngIf="showMessageView == true">
+  <app-jump-page [message] = 'message' [error] = 'error'></app-jump-page>
 </div>

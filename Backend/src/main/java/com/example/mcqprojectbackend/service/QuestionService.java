@@ -1,7 +1,9 @@
 package com.example.mcqprojectbackend.service;
 
 import com.example.mcqprojectbackend.dao.QuestionRepository;
+import com.example.mcqprojectbackend.dao.QuestionToTestRepository;
 import com.example.mcqprojectbackend.model.Question;
+import com.example.mcqprojectbackend.model.QuestionToTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,9 @@ public class QuestionService
 {
     @Autowired
     QuestionRepository questionRepository;
+
+    @Autowired
+    QuestionToTestRepository questionToTestRepository;
 
     @Transactional
     public List<Question> getAllQuestion()
@@ -32,6 +37,45 @@ public class QuestionService
         question.setCreateTime(sdf.format(date));
         question.setUpdateTime(sdf.format(date));
         return questionRepository.save(question);
+    }
+
+    @Transactional
+    public String addNewQuestionToSet(Long sid, Question question)
+    {
+        SimpleDateFormat sdf = new SimpleDateFormat();
+        sdf.applyPattern("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date();
+        question.setCreateTime(sdf.format(date));
+        question.setUpdateTime(sdf.format(date));
+        Question q = questionRepository.save(question);
+        if(q.getId() > 0)
+        {
+            QuestionToTest questionToTest = new QuestionToTest();
+            questionToTest.setQuestionId(q.getId());
+            questionToTest.setTestId(sid);
+            questionToTest = this.questionToTestRepository.save(questionToTest);
+            if(questionToTest.getId() > 0)
+            {
+                return "success";
+            }
+            return "Can Not Add Question To Test";
+        }
+        return "Can Not Add Question To DB";
+    }
+
+    @Transactional
+    public String addQuestionToSet(Long qid, Long sid)
+    {
+        QuestionToTest questionToTest = new QuestionToTest();
+        questionToTest.setQuestionId(qid);
+        questionToTest.setTestId(sid);
+        questionToTest = this.questionToTestRepository.save(questionToTest);
+        System.out.println(questionToTest.getId());
+        if(questionToTest.getId() > 0)
+        {
+            return "success";
+        }
+        return "Can Not Add Question to Test";
     }
 
     @Transactional
@@ -62,11 +106,13 @@ public class QuestionService
         Optional<Question> optionalTopic = questionRepository.findById(id);
         if(optionalTopic.isEmpty())
         {
+            questionToTestRepository.deleteQuestionToTestByQuestionId(id);
             return "Question Has Already Deleted";
         }
         else
         {
             questionRepository.delete(optionalTopic.get());
+            questionToTestRepository.deleteQuestionToTestByQuestionId(id);
             return "success";
         }
     }

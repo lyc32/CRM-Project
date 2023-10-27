@@ -4,7 +4,7 @@
   </div>
   <div class="row mt-5 mb-5">
       <div class="col-3 mt-4" *ngFor="let test of testList">
-        <div class="setCard" *ngIf="test.level <= user.level" (click)="showTest(test)">
+        <div class="setCard" *ngIf="test.level <= nextLevel" (click)="showTest(test)">
           <div class="setCard-title text-secondary">
             <h5>{{test.topic}}</h5>
           </div>
@@ -16,7 +16,7 @@
           </div>
         </div>
 
-        <div class="lockedCard lockedSet" *ngIf="test.level > user.level">
+        <div class="lockedCard lockedSet" *ngIf="test.level > nextLevel">
           <div class="lockedCard-title text-secondary">
             <h5>{{test.topic}}</h5>
           </div>
