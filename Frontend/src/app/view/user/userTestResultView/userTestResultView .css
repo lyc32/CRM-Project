@@ -1,0 +1,13 @@
+.dashboard-table {
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  thead.thead-dark th {
+    background-color: #343a40;
+    color: white;
+  }
+  
+  tr:hover {
+    background-color: #f2f2f2;
+  }
+  

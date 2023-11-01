@@ -71,6 +71,20 @@ public class Question
         this.updateTime = updateTime;
     }
 
+    public Question(Question question)
+    {
+        this.id = question.id;
+        this.question = question.question;
+        this.style = question.style;
+        this.body = question.body;
+        this.correct = question.correct;
+        this.wrong = question.wrong;
+        this.point = question.point;
+        this.time = question.time;
+        this.createTime = question.createTime;
+        this.updateTime = question.updateTime;
+    }
+
     // getter and setter
     public Long getId() {
         return id;

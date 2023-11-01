@@ -2,8 +2,11 @@ package com.example.mcqprojectbackend.service;
 
 import com.example.mcqprojectbackend.dao.QuestionRepository;
 import com.example.mcqprojectbackend.dao.QuestionToTestRepository;
+import com.example.mcqprojectbackend.dao.TestRepository;
+import com.example.mcqprojectbackend.memoryDB.MemoryDB;
 import com.example.mcqprojectbackend.model.Question;
 import com.example.mcqprojectbackend.model.QuestionToTest;
+import com.example.mcqprojectbackend.model.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class QuestionService
@@ -21,6 +25,29 @@ public class QuestionService
 
     @Autowired
     QuestionToTestRepository questionToTestRepository;
+
+    @Autowired
+    TestRepository testRepository;
+
+    MemoryDB memoryDB = new MemoryDB();
+
+    @Transactional
+    public List<Question> startTest(Long uid, Long tid) // TODO Bug:Re-Add snapShot to HashMap.
+    {
+        Optional<Test> optionalTest = testRepository.findById(tid);
+        if(optionalTest.isEmpty())
+        {
+            return null;
+        }
+        else
+        {
+            memoryDB.testSnapShot.put(uid, optionalTest.get());
+            List<Question> testWithAnswer = questionRepository.getQuestionByTestId(tid);
+            memoryDB.questionListSnapShot.put(uid, testWithAnswer);
+            List<Question> testNoAnswer = testWithAnswer.stream().map(Question::new).collect(Collectors.toList());
+            return testNoAnswer;
+        }
+    }
 
     @Transactional
     public List<Question> getAllQuestion()

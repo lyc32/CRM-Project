@@ -6,5 +6,6 @@ package com.example.mcqprojectbackend.model;
 
 public class UserState
 {
-    private Long userId;
+    private String SystemTime;
+    private String ClientTime;
 }

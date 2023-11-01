@@ -40,69 +40,10 @@ public class WebSocketServer
     // this webSocket's session.
     private Session session;
 
-    // This method will be called by the JobSheetRepository when Google Sheets written failed.
-    public static void pushErrorMessage(String timeStamp, String message, String sid)
-    {
-        System.out.println("[WebSocket] get Error message[" + message + "]");
-        // If there is no error message set for this client, create a new one.
-        if(messageSet.containsKey(sid))
-        {
-            // put error message to the set.
-            messageSet.get(sid).put(timeStamp, message);
-        }
-        else
-        {
-            // create a new set.
-            ConcurrentHashMap<String, String> newMessageSet = new ConcurrentHashMap<>();
-            // put error message to the set.
-            newMessageSet.put(timeStamp, message);
-            // put set to Map.
-            messageSet.put(sid, newMessageSet);
-        }
 
-        // If the client is still online, push the error message to the client.
-        if(webSocketSet.get(sid) != null)
-        {
-            webSocketSet.get(sid).sendMessage(timeStamp, message);
-        }
-        else
-        {
-            System.out.println("[WebSocket] client: " + sid + " [offline]");
-        }
-    }
-
-    // push the error message to this WebSocket's client.
-    private void sendMessage(String timeStamp, String message)
+    private void sendMessage(String message)
     {
         session.getAsyncRemote().sendText(message);
-        /*
-        // Try to push messages to the client 5 times.
-        // When the client receives the message.
-        // Client will automatically send a confirmation message to the server.
-        // And then, the server will remove this message from the error message set.
-        int i = 0;
-        // The number of pushes is less than 5, and no confirmation reply has been received.
-        while ((i < 5) && ( messageSet.get(sid).containsKey(timeStamp)))
-        {
-            i++;
-            System.out.println("[WebSocket] send("+i+") message[" + message + "] to client[" + sid + "]");
-            session.getAsyncRemote().sendText(message);
-            try
-            {
-                // After waiting for 2 seconds, and try again.
-                Thread.sleep(2000);
-            }
-            catch (InterruptedException e)
-            {
-                System.out.println("[WebSocket] send("+i+") Thread sleep Interrupted.");
-            }
-        }
-        // Clear message set after 5 push attempts
-        if(i == 5)
-        {
-            System.out.println("[WebSocket][Error][Thread Done]client[" + sid + "] may be not receive [" + message + "]");
-            messageSet.get(sid).remove(timeStamp);
-        }*/
     }
 
     @OnOpen
@@ -131,29 +72,8 @@ public class WebSocketServer
     @OnMessage
     public void onMessage(String timeStamp, Session session)
     {
-        System.out.println("send Message");
-        this.sendMessage("timeStamp","Hello Client");
-        /*
-        // Received confirmation reply.
-        if (messageSet.containsKey(sid))
-        {
-            // the confirmation message is received and the message set is cleared
-            if (messageSet.get(sid).containsKey(timeStamp))
-            {
-                messageSet.get(sid).remove(timeStamp);
-                System.out.println("[WebSocket]client[" + sid + "] receive [" + timeStamp + "]");
-            }
-            // The message set has been cleared before receiving the confirmation message.
-            else
-            {
-                System.out.println("[WebSocket]client[" + sid + "] has received [" + timeStamp + "] or Thread done.");
-            }
-        }
-        // Confirmation received for the second time.
-        else
-        {
-            System.out.println("[WebSocket][receive]client:[" + sid + "] is offline, but the message[" + timeStamp + "] has arrived.");
-        }*/
+        System.out.println("[WebSocket] client [" + sid + "] Message["+timeStamp+"].");
+        this.sendMessage("Hello Client");
     }
 
     @OnError

@@ -1,5 +1,6 @@
 package com.example.mcqprojectbackend.controller;
 
+import com.example.mcqprojectbackend.memoryDB.MemoryDB;
 import com.example.mcqprojectbackend.model.Question;
 import com.example.mcqprojectbackend.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,12 @@ public class QuestionController
 {
     @Autowired
     QuestionService questionService;
+
+    @GetMapping("/user/{uid}/startTest/{tid}")
+    public List<Question> startTest(@PathVariable Long uid, @PathVariable Long tid)
+    {
+        return questionService.startTest(uid, tid);
+    }
 
     @GetMapping("/user/getQuestionListByTestId/{tid}")
     public List<Question> getQuestionListByTestIdWithoutAnswer(@PathVariable Long tid)
