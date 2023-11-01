@@ -1,104 +1,137 @@
 <body>
-  <div class="container-fluid mt-4">
-    <div class="row justify-content-center" *ngIf="startTest == false && finishTest== false" >
+  <div class="container mt-4">
+    <div
+      class="row justify-content-center"
+      *ngIf="startTest == false && finishTest== false"
+    >
       <div class="card mt-4" style="width: 850px">
-        <label class="h4 m-2 mt-4"> · You have 20 minutes to complete the test.</label>
-        <label class="h4 m-2">· Once you click the start button, the TIMER will start.</label>
-        <label class="h4 m-2">· During the TEST process, you will not be able to pause or cancel.</label>
-        <label class="h4 m-2">· After you start test, the clock will appear in the upper right corner.</label>
-        <label class="h4 m-2">· When you answer the question, your answer is automatically SAVED.</label>
-        <label class="h4 m-2">· Once you have completed all questions, please click the "Submit" button.</label>
+        <label class="h4 m-2 mt-4">
+          · You have 20 minutes to complete the test.</label
+        >
+        <label class="h4 m-2">
+          · Once you click the start button, the TIMER will start.</label
+        >
+        <label class="h4 m-2">
+          · During the TEST process, you will not be able to pause or
+          cancel.</label
+        >
+        <label class="h4 m-2">
+          · After you start test, the clock will appear in the upper right
+          corner.</label
+        >
+        <label class="h4 m-2">
+          · When you answer the question, your answer is automatically
+          SAVED.</label
+        >
+        <label class="h4 m-2">
+          · Once you have completed all questions, please click the "Submit"
+          button.</label
+        >
         <div class="row text-center justify-content-center">
-          <button class="btn btn-primary btn-lg px-2 m-4" style="width: 200px" (click)="startButton()">
+          <button
+            class="btn btn-primary btn-lg px-2 m-4"
+            style="width: 200px"
+            (click)="startButton()"
+          >
             Start
           </button>
         </div>
       </div>
     </div>
-
-    <div class="row" style="min-height: 400px" *ngIf="startTest == true && remainingTime > 0">
-      <div class="col-3">
-        <div class="card" style="height: 500px;overflow: auto">
-          <div class="card-title border-bottom">
-            <h1 class="text-center">{{currentTest.name}}</h1>
-          </div>
-          <div class="row"><label class="h5">question 1</label></div>
-          <div class="row"><label class="h5">question 2</label></div>
-          <div class="row"><label class="h5">question 3</label></div>
-          <div class="row"><label class="h5">question 4</label></div>
-          <div class="row"><label class="h5">question 5</label></div>
-        </div>
-      </div>
-
-      <div class="col-9">
-        <div class="card p-3" style="height: 500px; overflow:auto;">
-          <div class="row justify-content-end">
-            <div class="col-2 timer-container">
-              <h4 class="timer-text">
-              <span class="timer-numbers">
+    
+    <div
+      class="row justify-content-center"
+      style="min-height: 400px"
+      *ngIf="startTest == true && remainingTime > 0"
+    >
+      <h1 class="text-center">{{currentTest.name}}</h1>
+      <div class="col-10">
+        <div class="timer-container">
+          <h4 class="timer-text">
+            Time Remaining:
+            <span class="timer-numbers">
               {{ minutes }}:{{ seconds < 10 ? '0' : '' }}{{ seconds }}
             </span>
-              </h4>
+          </h4>
+        </div>
+
+        <div class="row border border-dark rounded p-3 mt-5">
+          <!-- Previous Button -->
+          <div
+            class="col-2 d-flex justify-content-center align-items-center"
+            (click)="previousButton()"
+          >
+            <button class="btn btn-secondary btn-sm">
+              <i class="bi bi-arrow-left"></i>
+            </button>
+          </div>
+
+          <!-- Question and Answers -->
+          <div class="col-8">
+            <!-- Question -->
+            <div class="row mb-3">
+              <h4>{{currentQuestion.question}}</h4>
+              <h5>Please choose correct answer</h5>
+            </div>
+
+            <!-- Answers -->
+            <div class="row">
+              <div class="col-12">
+                <div
+                  class="form-check"
+                  *ngFor="let a of currentQuestion.answers"
+                >
+                <!-- Single Choice -->
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    *ngIf="currentQuestion.type === 'single choice'"
+                    [formControl]="getFormControl(currentQuestionIndex)"
+                    [value]="a"
+                  />
+                  <!-- Multiple Choice -->
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    *ngIf="currentQuestion.type === 'multiple choice'"
+                    [value]="a"
+                    (change)="onCheckboxChange(currentQuestionIndex, $event)"
+                  />
+                  <label class="form-check-label" for="{{a}}"> {{a}} </label>
+                </div>
+                <!-- Short Answer Choice -->
+                <input
+                class="form-control"
+                type="text"
+                *ngIf="currentQuestion.type === 'text'"
+                [formControl]="getFormControl(currentQuestionIndex)"
+              />
+              </div>
             </div>
           </div>
 
-          <div class="row">
-            <!-- Previous Button -->
-            <div class="col-1 d-flex justify-content-center align-items-center" (click)="previousButton()" >
-              <button class="btn btn-secondary btn-sm">
-                <i class="bi bi-arrow-left"></i>
-              </button>
-            </div>
-
-
-            <!-- Question and Answers -->
-            <div class="col-10">
-              <!-- Question -->
-              <div class="row mb-3">
-                <h4>{{currentQuestion.question}}</h4>
-                <h5>Please choose correct answer</h5>
-              </div>
-
-              <!-- Answers -->
-              <div class="row">
-                <div class="col-12">
-                  <div
-                    class="form-check"
-                    *ngFor="let a of currentQuestion.answers"
-                  >
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="answer{{currentQuestionIndex}}"
-                      id="{{a}}"
-                      [value]="a"
-                      [(ngModel)]="selectedAnswers[currentQuestionIndex]"
-                    />
-                    <label class="form-check-label" for="{{a}}"> {{a}} </label>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Next Button -->
-            <div class="col-1 d-flex justify-content-center align-items-center" (click)="nextButton()" *ngIf="currentQuestionIndex != questionList.length-1">
-              <button class="btn btn-secondary btn-sm">
-                <i class="bi bi-arrow-right"></i>
-              </button>
-            </div>
-
-            <!-- Submit Button -->
-            <div class="col-1 d-flex justify-content-center align-items-center" (click)="checkAnswer()" *ngIf="currentQuestionIndex == questionList.length-1">
-              <button class="btn btn-secondary btn-sm" style="width: 150px">
-                Submit
-              </button>
-            </div>
+          <!-- Next Button -->
+          <div
+            class="col-2 d-flex justify-content-center align-items-center"
+            (click)="nextButton()"
+          >
+            <button class="btn btn-secondary btn-sm">
+              <i class="bi bi-arrow-right"></i>
+            </button>
+          </div>
+          <!-- Submit Button -->
+          <div
+            class="d-flex justify-content-center"
+            (click)="checkAnswer()"
+            *ngIf="currentQuestionIndex == questionList.length-1"
+          >
+            <button class="btn btn-secondary btn-sm" style="width: 150px">
+              Submit
+            </button>
           </div>
         </div>
       </div>
     </div>
-
-
     <div *ngIf="remainingTime <= 0 && startTest" class="time-up-container">
       <h1 class="text-center time-up-text">Time's up!</h1>
       <h1 class="text-center time-up-text">Test is submited. Well-done!</h1>
@@ -134,17 +167,27 @@
               <tr *ngFor="let question of questionList; let i = index">
                 <th scope="row">{{ i + 1 }}</th>
                 <td>{{ question.question }}</td>
-                <td>{{ selectedAnswers[i] }}</td>
+                <td>
+                  <ng-container
+                    *ngIf="isArray(selectedAnswers[i]); else notArray"
+                  >
+                    {{ selectedAnswers[i] | json }}
+                  </ng-container>
+                  <ng-template #notArray>
+                    {{ selectedAnswers[i] }}
+                  </ng-template>
+                </td>
+
                 <td>{{ question.correctAnswer }}</td>
                 <td>
                   <span
-                    *ngIf="selectedAnswers[i]?.trim().toLowerCase() === question.correctAnswer?.trim().toLowerCase()"
+                    *ngIf="isAnswerCorrect(i, question.correctAnswer, question.type)"
                     class="badge badge-success"
                   >
                     <i class="fa fa-check"></i> Correct
                   </span>
                   <span
-                    *ngIf="selectedAnswers[i]?.trim().toLowerCase() !== question.correctAnswer?.trim().toLowerCase()"
+                    *ngIf="!isAnswerCorrect(i, question.correctAnswer, question.type)"
                     class="badge badge-danger"
                   >
                     <i class="fa fa-times"></i> Incorrect
