@@ -15,8 +15,6 @@ export class AdminDeshBoardView implements OnInit
     this.user = JSON.parse( window.sessionStorage.getItem('MCQuser') );
   }
 
-
-
   toAccountManageView()
   {
     window.location.href = "/" + this.user.role + "/account";

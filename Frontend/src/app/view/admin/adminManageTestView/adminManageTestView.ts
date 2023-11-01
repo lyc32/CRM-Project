@@ -6,6 +6,7 @@ import { Test } from 'src/app/model/Test';
 import {Question} from "../../../model/Question";
 import _default from "chart.js/dist/core/core.interaction";
 import dataset = _default.modes.dataset;
+import {Account} from "../../../model/Account";
 
 @Component({
   selector: 'app-admin-manage-test-view',
@@ -14,22 +15,31 @@ import dataset = _default.modes.dataset;
 })
 export class AdminManageTestView implements OnInit
 {
+    user:Account = new Account();
     testId:number = -1;
     test:Test = new Test();
     questionList:Question[] = new Array();
-
+    searchQuestionList:Question[] = new Array();
     newQuestion:Question = new Question();
     choiceList:string[] = new Array();
-
     currentQuestion:Question = new Question();
     currentChoiceList:string[] = new Array();
     currentAnswerList:string[] = new Array();
+    chosedExitQuestion:Question = new Question();
+    qid:string = '';
+    question:string = '';
+    style:string = '';
+    point:string = '';
+    topic:string = '';
+    testName:string = '';
+    checkbox:boolean = false;
 
-    showCreateNewQuestionView:boolean = false;
+
+  showCreateNewQuestionView:boolean = false;
     showEditQuestionView:boolean = false;
     showAddExistQuesitonView:boolean = false;
+    showExistCurrentQuestionView:boolean = false;
     showDeleteConfirmView:boolean = false;
-
     showRemoveQuestionConfirmView:boolean = false;
     showDeleteQuestionConfirmView:boolean = false;
 
@@ -44,8 +54,11 @@ export class AdminManageTestView implements OnInit
     }
 
 
-    ngOnInit(): void
+    ngOnInit(): void //TODO add Error=>{}
     {
+
+      // @ts-ignore
+      this.user = JSON.parse( window.sessionStorage.getItem('MCQuser') );
       this.testId = this.router.snapshot.params['tid'];
       this.testService.getTestById(this.testId)
         .subscribe(
@@ -55,19 +68,12 @@ export class AdminManageTestView implements OnInit
               this.test = data;
               this.getQuestionList();
             }
-            else
-            {
-
-            }
-          },
-          error => {
-
           }
         )
     }
 
 
-  getQuestionList()
+  getQuestionList() //TODO add Error=>{}
   {
     this.questionService.getQuestionByTestId(this.testId)
       .subscribe(
@@ -75,52 +81,13 @@ export class AdminManageTestView implements OnInit
         {
           this.questionList = data
           this.currentQuestion = this.questionList[0];
-        },
-        error =>
-        {
-
         }
       )
   }
 
-
-  showExistQuesiton()
+  openQuestionView(id:number)
   {
-    this.showAddExistQuesitonView  =true;
-    this.showCreateNewQuestionView = false;
-    this.showEditQuestionView      = false;
-  }
-  closeExistQuestion()
-  {
-    this.showAddExistQuesitonView  =false;
-  }
-
-  addQuestionIdToSet()
-  {
-    let qid = (document.getElementById("questionId") as HTMLInputElement).value;
-    this.questionService.addNewQuestionIdToSet(Number(qid), this.testId)
-      .subscribe(
-        data=>
-        {
-          if (data == 'success')
-          {
-            this.showEditQuestionView = false;
-            this.currentQuestion = new Question();
-            this.getQuestionList();
-            this.jumpWindow("Add Question To Test Successful",'');
-          }
-          else
-          {
-            this.showEditQuestionView  = false;
-            this.jumpWindow("Add Question To Test Failed",data);
-          }
-        },
-        error =>
-        {
-          this.showEditQuestionView  = false;
-          this.jumpWindow("Add Question To Test Failed",error.message);
-        }
-      )
+    window.open(this.user.role + "/question/" + id);
   }
 
 /************************** REMOVE QUESTION ***************************/
@@ -248,49 +215,121 @@ showDeleteQuestionConfirm(q:Question)
 
   update()
   {
+    let check:boolean = true;
+    // @ts-ignore
+    document.getElementById("currentQuestion").removeAttribute('style');
+    // @ts-ignore
+    document.getElementById("currentPoint"   ).removeAttribute('style');
+    // @ts-ignore
+    document.getElementById("currentTime"    ).removeAttribute('style');
+    // @ts-ignore
+    document.getElementById("currentAnswer"  ).removeAttribute('style');
+
     this.currentQuestion.question = (document.getElementById("currentQuestion") as HTMLTextAreaElement).value;
-    this.currentQuestion.point = parseInt((document.getElementById("currentPoint") as HTMLInputElement).value);
+    let point = (document.getElementById("currentPoint") as HTMLInputElement).value;
+    let time  = (document.getElementById("currentTime" ) as HTMLInputElement).value;
+    if(this.currentQuestion.question == '')
+    {
+      // @ts-ignore
+      document.getElementById("currentQuestion").style.borderColor = 'red';
+      check = false;
+    }
+    else if(point == '' || point == '-1')
+    {
+      // @ts-ignore
+      document.getElementById("currentPoint").style.borderColor = 'red'
+      check = false;
+    }
+    else if(time == '' || time == '-1')
+    {
+      // @ts-ignore
+      document.getElementById("currentTime").style.borderColor = 'red'
+      check = false;
+    }
+
     if(this.currentQuestion.style == 'Short Answer')
     {
       this.currentQuestion.body = ''
       this.currentQuestion.answer = (document.getElementById("currentAnswer") as HTMLTextAreaElement).value;
+      if(this.currentQuestion.answer == '')
+      {
+        // @ts-ignore
+        document.getElementById("currentAnswer").style.borderColor = 'red'
+        check = false;
+      }
     }
     else
     {
-      let answer:string[] = new Array();
-      for(let i=0; i<this.currentChoiceList.length; i++)
+      // @ts-ignore
+      document.getElementById("currentBody"    ).removeAttribute('style');
+      if(this.currentChoiceList.length == 0)
       {
-        if((document.getElementById("selectedCurrentChoice" + i) as HTMLInputElement).checked == true)
+        // @ts-ignore
+        document.getElementById("currentBody").style.color = 'red';
+        check = false;
+      }
+      else
+      {
+        this.currentQuestion.body = btoa(JSON.stringify(this.currentChoiceList))
+
+        let answer:string[] = new Array();
+        for(let i=0; i<this.currentChoiceList.length; i++)
         {
-          answer.push(this.currentChoiceList[i]);
+          if((document.getElementById("selectedCurrentChoice" + i) as HTMLInputElement).checked == true)
+          {
+            answer.push(this.currentChoiceList[i]);
+          }
+        }
+        this.currentQuestion.body = btoa(JSON.stringify(this.currentChoiceList))
+        this.currentQuestion.answer = btoa(JSON.stringify(answer))
+
+        if(answer.length == 0)
+        {
+          // @ts-ignore
+          document.getElementById("currentAnswer").style.color = 'red';
+          check = false;
+        }
+        else
+        {
+          this.currentQuestion.answer = btoa(JSON.stringify(answer))
         }
       }
-      this.currentQuestion.body = btoa(JSON.stringify(this.currentChoiceList))
-      this.currentQuestion.answer = btoa(JSON.stringify(answer))
     }
 
-    this.questionService.updateQuestion(this.currentQuestion)
-      .subscribe(
-        data=>
-        {
-          if (data == 'success')
+    if(check)
+    {
+      this.currentQuestion.point = parseInt(point);
+      this.currentQuestion.time  = parseInt(time );
+      this.questionService.updateQuestion(this.currentQuestion)
+        .subscribe(
+          data=>
           {
-            this.currentQuestion = new Question();
-            this.showEditQuestionView = false;
-            this.jumpWindow("Update Question Successful", '');
-          }
-          else
+            if (data == 'success')
+            {
+              this.currentQuestion = new Question();
+              if(this.showEditQuestionView == true)
+              {
+                this.showEditQuestionView = false;
+              }
+              if(this.showExistCurrentQuestionView == true)
+              {
+                this.reSearch();
+                this.showExistCurrentQuestionView = false;
+              }
+              this.jumpWindow("Update Question Successful", '');
+            }
+            else
+            {
+              this.jumpWindow("Update Question Successful", data);
+            }
+          },
+          error =>
           {
-            this.jumpWindow("Update Question Successful", data);
+            this.jumpWindow("Update Question Successful", error.message);
           }
-        },
-        error =>
-        {
-          this.jumpWindow("Update Question Successful", error.message);
-        }
-      )
+        )
+    }
   }
-
 
 /***************************** ADD QUESTION ******************************/
   showCreateQuestion()
@@ -298,6 +337,8 @@ showDeleteQuestionConfirm(q:Question)
       this.showCreateNewQuestionView = true;
       this.showEditQuestionView = false;
       this.showAddExistQuesitonView = false;
+      this.newQuestion = new Question();
+      this.choiceList = new Array();
     }
 
   getNewQuestionType()
@@ -327,47 +368,247 @@ showDeleteQuestionConfirm(q:Question)
     console.log(this.choiceList);
   }
 
-  submit() //TODO
+  submit()
   {
+    let check:boolean = true;
+    // @ts-ignore
+    document.getElementById("newQuestion").removeAttribute('style');
+    // @ts-ignore
+    document.getElementById("newPoint"   ).removeAttribute('style');
+    // @ts-ignore
+    document.getElementById("newTime"    ).removeAttribute('style');
+    // @ts-ignore
+    document.getElementById("newAnswer"  ).removeAttribute('style');
+
     this.newQuestion.question = (document.getElementById("newQuestion") as HTMLTextAreaElement).value;
-    this.newQuestion.point = parseInt((document.getElementById("newPoint") as HTMLInputElement).value);
+    let point = (document.getElementById("newPoint") as HTMLInputElement).value;
+    let time  = (document.getElementById("newTime" ) as HTMLInputElement).value;
+    if(this.newQuestion.question == '')
+    {
+      // @ts-ignore
+      document.getElementById("newQuestion").style.borderColor = 'red';
+      check = false;
+    }
+    else if(point == '' || point == '-1')
+    {
+      // @ts-ignore
+      document.getElementById("newPoint").style.borderColor = 'red'
+      check = false;
+    }
+    else if(time == '' || time == '-1')
+    {
+      // @ts-ignore
+      document.getElementById("newTime").style.borderColor = 'red'
+      check = false;
+    }
+
     if(this.newQuestion.style == 'Short Answer')
     {
       this.newQuestion.body = ''
       this.newQuestion.answer = (document.getElementById("newAnswer") as HTMLTextAreaElement).value;
+      if(this.newQuestion.answer == '')
+      {
+        // @ts-ignore
+        document.getElementById("newAnswer").style.borderColor = 'red'
+        check = false;
+      }
     }
     else
     {
-      let answer:string[] = new Array();
-      for(let i=0; i<this.choiceList.length; i++)
+      // @ts-ignore
+      document.getElementById("newBody"    ).removeAttribute('style');
+      if(this.choiceList.length == 0)
       {
-        if((document.getElementById("selectedChoice" + i) as HTMLInputElement).checked == true)
+        // @ts-ignore
+        document.getElementById("newBody").style.color = 'red';
+        check = false;
+      }
+      else
+      {
+        this.newQuestion.body = btoa(JSON.stringify(this.choiceList))
+
+        let answer: string[] = new Array();
+        for (let i = 0; i < this.choiceList.length; i++) {
+          if ((document.getElementById("selectedChoice" + i) as HTMLInputElement).checked == true) {
+            answer.push(this.choiceList[i]);
+          }
+        }
+
+        if(answer.length == 0)
         {
-          answer.push(this.choiceList[i]);
+          // @ts-ignore
+          document.getElementById("newAnswer").style.color = 'red';
+          check = false;
+        }
+        else
+        {
+          this.newQuestion.answer = btoa(JSON.stringify(answer))
         }
       }
-      this.newQuestion.body = btoa(JSON.stringify(this.choiceList))
-      this.newQuestion.answer = btoa(JSON.stringify(answer))
     }
 
-    this.questionService.addNewQuestionToSet(this.newQuestion, this.testId)
+    if(check)
+    {
+      this.newQuestion.point = parseInt(point);
+      this.newQuestion.time  = parseInt(time );
+
+      this.questionService.addNewQuestionToSet(this.newQuestion, this.testId)
+        .subscribe(
+          data=>
+          {
+            if (data == 'success')
+            {
+              this.newQuestion = new Question();
+              this.choiceList = new Array();
+              this.getQuestionList();
+              this.jumpWindow("Add Question Successful",'');
+            }
+            else
+            {
+              this.jumpWindow("Add Question Failed",data);
+            }
+          },
+          error =>
+          {
+            this.jumpWindow("Add Question Failed",error.message);
+          }
+        )
+    }
+  }
+
+/************************ SHOW EXIST QUESTION ***************************/
+  showExistCurrentQuestion(q:Question)
+  {
+    this.currentQuestion=q;
+    if(q.style != 'Short Answer')
+    {
+      this.currentChoiceList = JSON.parse(atob(q.body));
+      this.currentAnswerList = JSON.parse(atob(q.answer));
+    }
+    this.showExistCurrentQuestionView = true;
+  }
+
+  closeExistCurrentQuestion()
+  {
+    if(this.currentQuestion.style != 'Short Answer')
+    {
+      this.currentChoiceList = new Array();
+      this.currentAnswerList = new Array();
+    }
+    this.currentQuestion = new Question();
+    this.showExistCurrentQuestionView = false;
+  }
+
+/************************* ADD EXIST QUESTION ***************************/
+  showExistQuesiton()
+  {
+    this.showAddExistQuesitonView  =true;
+    this.showCreateNewQuestionView = false;
+    this.showEditQuestionView      = false;
+  }
+  closeExistQuestion()
+  {
+    this.showAddExistQuesitonView  =false;
+  }
+
+  search()
+  {
+    this.checkbox = (document.getElementById("searchCheckBox") as HTMLInputElement).checked;
+    if(this.checkbox == true)
+    {
+      this.searchQuestionNotInALLTest();
+    }
+    else
+    {
+      this.searchQuestionNotInThisTest();
+    }
+
+  }
+
+  searchQuestionNotInThisTest()
+  {
+    this.qid      = (document.getElementById("searchQid"     ) as HTMLInputElement ).value;
+    this.question = (document.getElementById("searchQuestion") as HTMLInputElement ).value;
+    this.style    = (document.getElementById("searchStyle"   ) as HTMLSelectElement).value;
+    this.point    = (document.getElementById("searchPoint"    ) as HTMLInputElement ).value;
+    this.topic    = (document.getElementById("searchTopic"   ) as HTMLSelectElement).value;
+    this.testName = (document.getElementById("searchTest"    ) as HTMLInputElement ).value;
+    if(this.qid == '')
+    {
+      this.qid = '-1';
+    }
+    if(this.point == '')
+    {
+      this.point = '-1';
+    }
+
+    this.questionService.searchQuestionNotInThisTest(parseInt(this.qid), this.question, this.style, parseInt(this.point), this.topic, this.testName, this.testId)
+      .subscribe(data=>{this.searchQuestionList = data; console.log(data)});
+  }
+
+  searchQuestionNotInALLTest()
+  {
+    this.qid      = (document.getElementById("searchQid"     ) as HTMLInputElement ).value;
+    this.question = (document.getElementById("searchQuestion") as HTMLInputElement ).value;
+    this.style    = (document.getElementById("searchStyle"   ) as HTMLSelectElement).value;
+    this.point     = (document.getElementById("searchPoint"    ) as HTMLInputElement ).value;
+    if(this.qid == '')
+    {
+      this.qid = '-1';
+    }
+    if(this.point == '')
+    {
+      this.point = '-1';
+    }
+
+    this.questionService.searchQuestionNotInALLTest(parseInt(this.qid), this.question, this.style, parseInt(this.point))
+      .subscribe(data=>{this.searchQuestionList = data; console.log(data)});
+  }
+
+  reSearch()
+  {
+    if(this.checkbox == true)
+    {
+      this.questionService.searchQuestionNotInALLTest(parseInt(this.qid), this.question, this.style, parseInt(this.point))
+        .subscribe(data=>{this.searchQuestionList = data; console.log(data)});
+    }
+    else
+    {
+      // searchQuestionNotInThisTest
+      this.questionService.searchQuestionNotInThisTest(parseInt(this.qid), this.question, this.style, parseInt(this.point), this.topic, this.testName, this.testId)
+        .subscribe(data=>{this.searchQuestionList = data; console.log(data)});
+    }
+  }
+
+
+  chooseExitQuestion(q:Question)
+  {
+    this.chosedExitQuestion = q;
+  }
+  addQuestionIdToSet()
+  {
+    this.questionService.addNewQuestionIdToSet(this.chosedExitQuestion.id, this.testId)
       .subscribe(
         data=>
         {
           if (data == 'success')
           {
-            this.newQuestion = new Question();
+            this.showEditQuestionView = false;
+            this.currentQuestion = new Question();
+            this.reSearch();
             this.getQuestionList();
-            this.jumpWindow("Add Question Successful",'');
+            this.jumpWindow("Add Question To Test Successful",'');
           }
           else
           {
-            this.jumpWindow("Add Question Failed",data);
+            this.showEditQuestionView  = false;
+            this.jumpWindow("Add Question To Test Failed",data);
           }
         },
         error =>
         {
-          this.jumpWindow("Add Question Failed",error.message);
+          this.showEditQuestionView  = false;
+          this.jumpWindow("Add Question To Test Failed",error.message);
         }
       )
   }
@@ -428,7 +669,7 @@ showDeleteQuestionConfirm(q:Question)
     } else if (this.test.name == '') {
       // @ts-ignore
       document.getElementById("name").style.borderColor = 'red'
-    } else if (level == '') {
+    } else if (level == '' || level == '-1') {
       // @ts-ignore
       document.getElementById("level").style.borderColor = 'red'
     }

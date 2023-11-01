@@ -70,4 +70,22 @@ public class QuestionController
         return questionService.getQuestionByTestId(tid);
     }
 
+    @PostMapping("/admin/search/question")
+    public List<Question> searchQuestion(Long qid, String question, String style, Integer point, String topic, String testName)
+    {
+        return this.questionService.searchQuestion(qid, question, style, point, topic, testName);
+    }
+
+    @PostMapping("/admin/search/question/notInAllTest")
+    public List<Question> searchQuestionNotInALLTest(Long qid, String question, String style, Integer point)
+    {
+        return this.questionService.searchQuestionNotInALLTest(qid, question, style, point);
+    }
+
+    @PostMapping("/admin/search/question/notInTestId/{tid}")
+    public List<Question> searchQuestionNotInTestID(@PathVariable Long tid, Long qid, String question, String style, Integer point, String topic, String testName)
+    {
+        return this.questionService.searchQuestionNotInTestId(qid, question, style, point, topic, testName, tid);
+    }
+
 }

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Account} from "../../../model/Account";
 import {AccountService} from "../../../service/account-service";
 

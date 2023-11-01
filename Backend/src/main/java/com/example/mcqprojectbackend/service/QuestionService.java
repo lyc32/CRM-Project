@@ -130,4 +130,22 @@ public class QuestionService
         t.stream().forEach(e-> e.setAnswer(""));
         return t;
     }
+
+    @Transactional
+    public List<Question> searchQuestion(Long qid, String question, String style, Integer point, String topic, String testName)
+    {
+        return this.questionRepository.searchQuestion(qid, question, style, point, topic, testName);
+    }
+
+    @Transactional
+    public List<Question> searchQuestionNotInALLTest(Long qid, String question, String style, Integer point)
+    {
+        return this.questionRepository.searchQuestionNotInALLTest(qid, question, style, point);
+    }
+
+    @Transactional
+    public List<Question> searchQuestionNotInTestId(Long qid, String question, String style, Integer point, String topic, String testName, Long tid)
+    {
+        return this.questionRepository.searchQuestionNotInTestId(qid, question, style, point, topic, testName, tid);
+    }
 }

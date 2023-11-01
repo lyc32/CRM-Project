@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Account} from "../../../model/Account";
 import {AccountService} from "../../../service/account-service";
 import _default from "chart.js/dist/plugins/plugin.tooltip";
@@ -12,7 +12,7 @@ import numbers = _default.defaults.animations.numbers;
 export class AdminManageAccountListView implements OnInit
 {
   searchCondition = {id:-1, userName:'', emailId:'', phone:'', minLevel:-1, maxLevel:-1, role:''};
-  user:Account = new Account();
+  @Input() user:Account = new Account();
   accountList:Account[] = new Array();
   currentAccount:Account = new Account();
   newAccount:Account = new Account();
@@ -31,7 +31,7 @@ export class AdminManageAccountListView implements OnInit
   ngOnInit(): void
   {
     // @ts-ignore
-    this.user = JSON.parse( window.sessionStorage.getItem('MCQuser') );
+    //this.user = JSON.parse( window.sessionStorage.getItem('MCQuser') );
   }
 
 /******************************** SEARCH ********************************/

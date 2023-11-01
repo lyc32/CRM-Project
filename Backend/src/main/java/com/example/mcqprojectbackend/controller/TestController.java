@@ -15,7 +15,6 @@ public class TestController
     @Autowired
     TestService testService;
 
-
     @GetMapping("/user/getAllTest")
     public List<Test> userGetAllTest()
     {

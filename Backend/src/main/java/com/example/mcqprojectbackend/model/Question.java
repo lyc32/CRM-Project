@@ -46,6 +46,8 @@ public class Question
     private Long wrong;
     @Column(name = "point")
     private Integer point;
+    @Column(name = "time")
+    private Integer time;
     @Column(name = "create_time")
     private String createTime;
     @Column(name = "update_time")
@@ -55,7 +57,7 @@ public class Question
     public Question() {
     }
 
-    public Question(Long id, String question, String style, String body, String answer, Long correct, Long wrong, Integer point, String createTime, String updateTime) {
+    public Question(Long id, String question, String style, String body, String answer, Long correct, Long wrong, Integer point, Integer time, String createTime, String updateTime) {
         this.id = id;
         this.question = question;
         this.style = style;
@@ -64,6 +66,7 @@ public class Question
         this.correct = correct;
         this.wrong = wrong;
         this.point = point;
+        this.time = time;
         this.createTime = createTime;
         this.updateTime = updateTime;
     }
@@ -137,6 +140,14 @@ public class Question
         return createTime;
     }
 
+    public Integer getTime() {
+        return time;
+    }
+
+    public void setTime(Integer time) {
+        this.time = time;
+    }
+
     public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
@@ -171,6 +182,10 @@ public class Question
         if(question.getPoint() != null)
         {
             this.point = question.getPoint();
+        }
+        if(question.getTime() != null)
+        {
+            this.time = question.getTime();
         }
     }
 

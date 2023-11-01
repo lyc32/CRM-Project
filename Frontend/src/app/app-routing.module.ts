@@ -20,31 +20,31 @@ import { AdminManageQuestionView } from './view/admin/adminManageQuestionView/ad
 const routes: Routes = [
 
   // for all account
-  {path:"login"                   , component:LogInView               },
-  {path:":role/initAccount"             , component:InitAccountView         },
-  {path:":role/myAccount"         , component:MyAccountView           },
-  {path:":role/resetPassword"     , component:ResetPasswordView       },
+  {path:"login"                   , component:LogInView                   },
+  {path:":role/initAccount"       , component:InitAccountView             },
+  {path:":role/myAccount"         , component:MyAccountView               },
+  {path:":role/resetPassword"     , component:ResetPasswordView           },
 
   // for user
-  {path:"user/dashboard"          , component:UserDashBoardView       },
-  {path:"user/myTest"             , component:UserTestListView        }, //TODO level Bug
-  {path:"user/myTest/:tid"        , component:UserTakeTestView        }, //TODO test start view
-  {path:"user/myAwards"           , component:UserTestResultView      }, //TODO
-  {path:"user/myAwards/:rid"      , component:UserTestResultView      }, //TODO
+  {path:"user/dashboard"          , component:UserDashBoardView           },
+  {path:"user/myTest"             , component:UserTestListView            },
+  {path:"user/myTest/:tid"        , component:UserTakeTestView            }, //TODO test start view
+  {path:"user/myAwards"           , component:UserTestResultView          }, //TODO
+  {path:"user/myAwards/:rid"      , component:UserTestResultView          }, //TODO
 
   // for admin
-  {path:":role/dashboard"         , component:AdminDeshBoardView         },
-  {path:":role/topic"             , component:AdminManageTopicView       },
-  {path:":role/test"              , component:AdminManageTestListView    }, //TODO filter
-  {path:":role/test/:tid"         , component:AdminManageTestView        }, //TODO
+  {path:":role/dashboard"         , component:AdminDeshBoardView          },
+  {path:":role/topic"             , component:AdminManageTopicView        },
+  {path:":role/test"              , component:AdminManageTestListView     },
+  {path:":role/test/:tid"         , component:AdminManageTestView         },
 
-  {path:":role/question"          , component:AdminManageQuestionListView }, //TODO Search update delete
+  {path:":role/question"          , component:AdminManageQuestionListView },
   {path:":role/question/:qid"     , component:AdminManageQuestionView     }, //TODO
 
   {path:":role/account"           , component:AdminManageAccountListView  },
-  {path:":role/account/:aid"      , component:UserTestListView            }, //TODO account data
+  {path:":role/account/:aid"      , component:UserTestResultView          }, //TODO account data
 
-  {path:":role/:operation/:result", component:JumpPage                    }  //TODO @input @output
+  {path:":role/:operation/:result", component:JumpPage                    }
 ];
 
 @NgModule({
