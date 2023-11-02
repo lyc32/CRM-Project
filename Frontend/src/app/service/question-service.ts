@@ -111,11 +111,15 @@ export class QuestionService
     // @ts-ignore
     return this.httpClient.delete<string>('http://localhost:8080/api/v1/admin/removeQuestion/' + qid + '/fromTest/' + tid, {responseType: 'text'});
   }
-
-  deleteQuestion(id:number):Observable<string>
+  getQuestionById(id:number):Observable<Question>
   {
-    // @ts-ignore
-    return this.httpClient.delete<string>('http://localhost:8080/api/v1/admin/deleteQuestionById/' + id, {responseType: 'text'});
+    return this.httpClient.get<Question>('http://localhost:8080/api/v1/admin/getQuestionById/' + id);
+  }
+  deleteQuestion(id: number): Observable<string>{
+    console.log("Delete Called " + id);
+    const url = `http://localhost:8080/api/v1/admin/deleteQuestionById/${id}`;
+    const options = { responseType: 'text' as 'json' };
+    return this.httpClient.delete<string>(url, options);
   }
 
   updateQuestion(question:Question):Observable<string>
