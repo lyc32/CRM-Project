@@ -3,6 +3,7 @@ import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {observable, Observable} from "rxjs";
 import { Account } from "../model/Account";
 import { Test } from "../model/Test";
+import {Question} from "../model/Question";
 
 
 @Injectable({
@@ -26,6 +27,7 @@ export class TestService
   {
     return this.httpClient.get<Test[]>('http://localhost:8080/api/v1/admin/getTestByQuestionId/'+ id);
   }
+
   addNewTest(test:Test):Observable<Test>
   {
     const httpHeaders = new HttpHeaders().set('Content-Type', 'application/json');

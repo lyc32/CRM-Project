@@ -31,7 +31,7 @@ public class MailClient {
             helper.setText(content,true);
             mailSender.send(helper.getMimeMessage());
         } catch (MessagingException e) {
-            logger.error("发送邮件失败"+e.getMessage());
+            logger.error("Send Email Failed"+e.getMessage());
         }
     }
 }

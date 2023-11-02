@@ -41,8 +41,8 @@ export class AdminManageQuestionView {
     });
     this.getTestByQuestionId(this.questionId);
   }
-  
-  
+
+
   getTestByQuestionId(qid:number)
   {
     this.testService.getTestByQuestionId(this.questionId).subscribe(
@@ -117,6 +117,13 @@ export class AdminManageQuestionView {
     this.showEditTestView = true;
     //this.showAddExitQuesitonView = false;
   }
+
+  closeCurrentTest() {
+    this.currentTest = new Test();
+    //this.showCreateNewQuestionView = false;
+    this.showEditTestView = false;
+    //this.showAddExitQuesitonView = false;
+  }
   removeQuestionFromTest(tid:number, pid:number)
   {
     console.log("Delete get called");
@@ -174,7 +181,7 @@ export class AdminManageQuestionView {
     ).value;
   }
 
-  
+
 
   /***************************** Massage View *****************************/
   jumpWindow(message:string, error:string)

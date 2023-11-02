@@ -25,7 +25,7 @@ import { AdminManageQuestionListView } from './view/admin/adminManageQuestionLis
 import { AdminManageAccountListView } from './view/admin/adminManageAccountListView/adminManageAccountListView';
 import { UserTestResultView } from './view/user/userTestResultView/userTestResultView ';
 import { AdminManageQuestionView } from './view/admin/adminManageQuestionView/adminManageQuestionView';
-import { ReactiveFormsModule } from '@angular/forms';
+import { AdminManageAccountView } from './view/admin/adminManageAccountView/adminManageAccountView';
 
 @NgModule({
   declarations: [
@@ -49,13 +49,13 @@ import { ReactiveFormsModule } from '@angular/forms';
     AdminManageQuestionView,
     AdminManageAccountListView,
     UserTestResultView,
+    AdminManageAccountView,
   ],
     imports: [
         BrowserModule,
         AppRoutingModule,
         HttpClientModule,
         RouterOutlet,
-        ReactiveFormsModule,
         FormsModule
     ],
   providers: [],

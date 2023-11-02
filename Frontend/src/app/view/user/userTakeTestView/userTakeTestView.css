@@ -67,8 +67,6 @@ body {
   }
   .timer-container {
     display: inline-flex; /* Make the container only as wide as its content */
-    padding: 10px;
-    margin-left: 750px;
     background-color: #d2c0c0;  /* Light grey background */
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -123,5 +121,13 @@ body {
     width: auto !important; /* Force override any existing styles */
   }
 
-
-
+pre
+{
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -o-pre-wrap;
+  *word-wrap: break-word;
+  *white-space : normal ;
+  font-family: Helvetica, sans-serif;
+  font-size: 1.7em;
+}

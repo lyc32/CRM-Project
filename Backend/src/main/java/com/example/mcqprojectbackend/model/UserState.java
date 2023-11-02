@@ -8,4 +8,15 @@ public class UserState
 {
     private String SystemTime;
     private String ClientTime;
+
+    public UserState(String systemTime, String clientTime) {
+        SystemTime = systemTime;
+        ClientTime = clientTime;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "[SystemTime:" + SystemTime + "][ClientTime: " + ClientTime + "]\n";
+    }
 }

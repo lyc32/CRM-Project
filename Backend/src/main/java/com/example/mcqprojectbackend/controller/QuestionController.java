@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -16,10 +17,20 @@ public class QuestionController
     @Autowired
     QuestionService questionService;
 
+    MemoryDB memoryDB = new MemoryDB();
+
     @GetMapping("/user/{uid}/startTest/{tid}")
     public List<Question> startTest(@PathVariable Long uid, @PathVariable Long tid)
     {
         return questionService.startTest(uid, tid);
+    }
+
+    @GetMapping("/user/getQuestionListSnapShot/{uid}")
+    public List<Question> getQuestionListSnapShot(@PathVariable Long uid)
+    {
+        List<Question> testWithAnswer = memoryDB.questionListSnapShot.get(uid);
+        List<Question> testNoAnswer = testWithAnswer.stream().map(Question::new).collect(Collectors.toList());
+        return testNoAnswer;
     }
 
     @GetMapping("/user/getQuestionListByTestId/{tid}")

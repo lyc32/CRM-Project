@@ -31,7 +31,7 @@ export class AdminManageAccountListView implements OnInit
   ngOnInit(): void
   {
     // @ts-ignore
-    //this.user = JSON.parse( window.sessionStorage.getItem('MCQuser') );
+    this.user = JSON.parse( window.sessionStorage.getItem('MCQuser') );
   }
 
 /******************************** SEARCH ********************************/
@@ -183,6 +183,7 @@ export class AdminManageAccountListView implements OnInit
   // Open A new page to show Detail
   viewAccountDetail()
   {
+    console.log(this.user.role + "/account/" + this.currentAccount.id);
     window.open(this.user.role + "/account/" + this.currentAccount.id);
   }
 

@@ -13,10 +13,16 @@ export class QuestionService
   constructor(private httpClient:HttpClient)
   { }
 
-  getAllQuestion():Observable<Question[]>
+  startTestByTestId(uid:number,tid:number):Observable<Question[]>
   {
-    return this.httpClient.get<Question[]>('http://localhost:8080/api/v1/admin/getAllQuestion');
+    return this.httpClient.get<Question[]>('http://localhost:8080/api/v1/user/'+uid+'/startTest/' + tid);
   }
+
+  getQuestionListSnapShot(uid:number):Observable<Question[]>
+  {
+    return this.httpClient.get<Question[]>('http://localhost:8080/api/v1/user/getQuestionListSnapShot/' + uid);
+  }
+
 
   getQuestionByTestId(id:number):Observable<Question[]>
   {
@@ -115,11 +121,11 @@ export class QuestionService
   {
     return this.httpClient.get<Question>('http://localhost:8080/api/v1/admin/getQuestionById/' + id);
   }
-  deleteQuestion(id: number): Observable<string>{
-    console.log("Delete Called " + id);
-    const url = `http://localhost:8080/api/v1/admin/deleteQuestionById/${id}`;
-    const options = { responseType: 'text' as 'json' };
-    return this.httpClient.delete<string>(url, options);
+
+  deleteQuestion(id:number):Observable<string>
+  {
+    // @ts-ignore
+    return this.httpClient.delete<string>('http://localhost:8080/api/v1/admin/deleteQuestionById/' + id, {responseType: 'text'});
   }
 
   updateQuestion(question:Question):Observable<string>

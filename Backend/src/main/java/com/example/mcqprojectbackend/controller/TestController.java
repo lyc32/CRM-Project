@@ -39,8 +39,8 @@ public class TestController
         return testService.getTestById(id);
     }
 
-    @GetMapping("/admin/getTestByQuestionId")
-    public List<Test> getTestByQuestionId(Long id)
+    @GetMapping("/admin/getTestByQuestionId/{id}")
+    public List<Test> getTestByQuestionId(@PathVariable Long id)
     {
         return testService.getTestByQuestionId(id);
     }

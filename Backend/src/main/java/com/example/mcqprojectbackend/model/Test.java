@@ -24,7 +24,6 @@ public class Test
     public Test()
     {
     }
-
     public Test(Long id, String topic, String name, Integer level, String createTime, String updateTime) {
         this.id = id;
         this.topic = topic;

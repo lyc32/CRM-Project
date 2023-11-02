@@ -16,6 +16,7 @@ import { AdminManageQuestionListView } from './view/admin/adminManageQuestionLis
 import { AdminManageAccountListView } from './view/admin/adminManageAccountListView/adminManageAccountListView';
 import { UserTestResultView } from './view/user/userTestResultView/userTestResultView ';
 import { AdminManageQuestionView } from './view/admin/adminManageQuestionView/adminManageQuestionView';
+import {AdminManageAccountView} from "./view/admin/adminManageAccountView/adminManageAccountView";
 
 const routes: Routes = [
 
@@ -28,8 +29,8 @@ const routes: Routes = [
   // for user
   {path:"user/dashboard"          , component:UserDashBoardView           },
   {path:"user/myTest"             , component:UserTestListView            },
-  {path:"user/myTest/:tid"        , component:UserTakeTestView            }, //TODO test start view
-  {path:"user/myAwards"           , component:UserTestResultView          }, //TODO
+  {path:"user/myTest/:tid"        , component:UserTakeTestView            },
+  {path:"user/myAwards"           , component:UserTestResultView          },
   {path:"user/myAwards/:rid"      , component:UserTestResultView          }, //TODO
 
   // for admin
@@ -42,7 +43,7 @@ const routes: Routes = [
   {path:":role/question/:qid"     , component:AdminManageQuestionView     }, //TODO
 
   {path:":role/account"           , component:AdminManageAccountListView  },
-  {path:":role/account/:aid"      , component:UserTestResultView          }, //TODO account data
+  {path:":role/account/:uid"      , component:AdminManageAccountView      }, //TODO account data
 
   {path:":role/:operation/:result", component:JumpPage                    }
 ];

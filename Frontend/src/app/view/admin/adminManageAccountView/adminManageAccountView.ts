@@ -11,12 +11,12 @@ import {TestResult} from "../../../model/TestResult";
 Chart.register(...registerables);
 
 @Component({
-  selector: 'app-user-test-result-view',
-  templateUrl: './userTestResultView .html',
-  styleUrls: ['./userTestResultView .css']
+  selector: 'app-admin-manage-account-view',
+  templateUrl: './adminManageAccountView.html',
+  styleUrls: ['./adminManageAccountView.css']
 })
-export class UserTestResultView
-{
+export class AdminManageAccountView {
+
   @ViewChild('gradePieChart') chartRef!: ElementRef;
 
   user:Account = new Account();
@@ -32,7 +32,7 @@ export class UserTestResultView
   {
     // @ts-ignore
     this.user = JSON.parse( window.sessionStorage.getItem('MCQuser') );
-    this.uid = this.user.id;
+    this.uid = this.router.snapshot.params['uid'];
     this.testResultService.getTestResultByUderId(this.uid)
       .subscribe(
         data=>

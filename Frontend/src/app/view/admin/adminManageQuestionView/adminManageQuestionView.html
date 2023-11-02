@@ -1,7 +1,7 @@
 
-<div class="row m-5" *ngIf="showDeleteQuestionConfirmView == false">
+<div class="row m-1" *ngIf="showDeleteQuestionConfirmView == false">
     <!-- Question View -->
-    <div class="col-3 mr-05">
+    <div class="col-6">
       <div class="modal-content container mt-3" style="width: 400px; height: 470px">
         <label class="mt-2"><b>Question</b></label>
           <input type="text" id="question" value="{{question.question}}" required />
@@ -13,72 +13,74 @@
           <input type="text" id="point" value="{{question.point}}" required />
           <div class="row justify-content-end mb-2">
             <div class="col-5">
-              <button
-                type="button"
-                style="background-color: #c44336"
-                (click)="showDeleteQuestionConfirm(question)"
-              >
+              <button type="button" style="background-color: #c44336" (click)="showDeleteQuestionConfirm(question)">
                 Delete
               </button>
             </div>
             <div class="col-5">
-              <button 
-                type="button"
-                (click)="update()"
-              >Update</button>
+              <button type="button" (click)="update()">Update</button>
             </div>
           </div>
       </div>
-      <button class="bg-secondary mt-2" (click)="showCreateQuestion()">
-        Create A New Question
-      </button>
-      <button class="bg-secondary mt-2">Add Exist Questions</button>
     </div>
-  
+
     <!-- Question List -->
-    <div class="col-4 m-2">
-      <div class="modal-content container mt-1" style="height: 570px; overflow: auto">
-        <div class="modal-content container mt-1" style="width: 600px"  *ngFor="let test of testList">
-          <div class="row border-bottom ms-1 me-2">
-            <div class="col-3 ms-2">
-              <label class="h6">{{'#'+ test.id}}</label><br>
+    <div class="col-6" *ngIf="showEditTestView == false">
+      <div class="modal-content container mt-1" style="width:600px;height: 570px; overflow: auto" *ngIf="testList.length == 0">
+        <h1 class="text-secondary m-4">No Data</h1>
+      </div>
+      <div class="modal-content container mt-1" style="width:600px;height: 570px; overflow: auto">
+        <div class="row">
+          <div class="col-6"><button class="bg-secondary mt-2" (click)="showCreateQuestion()">Create A New Test</button></div>
+          <div class="col-6"><button class="bg-secondary mt-2">Add Exist Test</button></div>
+        </div>
+        <div style="width:600px;height: 470px; overflow: auto">
+          <div class="modal-content container mt-1 me-5" style="width: 530px"  *ngFor="let test of testList">
+            <div class="row border-bottom ms-1 me-2">
+              <div class="col-3 ms-2">
+                <label class="h6">{{'#'+ test.id}}</label><br>
+              </div>
+              <div class="col-3 ">
+                <label class="h6">Level: {{test.level}}</label><br>
+              </div>
             </div>
-            <div class="col-5 ">
-              <label class="h6">{{test.name}}</label><br>
-            </div>
-            <div class="col-3">
-              <label class="h6">{{test.topic}}</label><br>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-8 border-end" style="height: 100px; overflow: auto">
-              <div class="m-2 h5">Test Level: {{test.level}}</div>
-            </div>
-            <div class="col-3 ms-2 me-2 ">
-              <div class="row mt-2">
-                <button class="form-control btn btn-sm btn-outline-success pt-0" style="height:22px" (click)="showCurrentTest(test)">VIEW  </button>
-                <button class="form-control btn btn-sm btn-outline-warning pt-0" style="height:22px" (click)="removeQuestionFromTest(test.id, question.id)" >REMOVE</button>
+            <div class="row">
+              <div class="col-8 border-end" style="height: 80px; overflow: auto">
+                <div class="m-2 h5">{{test.name}}</div>
+                <div class="m-2 h5 text-secondary">{{test.topic}}</div>
+              </div>
+              <div class="col-3 ms-2 me-2 ">
+                <div class="row mt-2">
+                  <button class="form-control btn btn-sm btn-outline-success pt-0" style="height:22px" (click)="showCurrentTest(test)">VIEW  </button>
+                  <button class="form-control btn btn-sm btn-outline-warning pt-0" style="height:22px" (click)="removeQuestionFromTest(test.id, question.id)" >REMOVE</button>
+                </div>
               </div>
             </div>
           </div>
         </div>
-  
       </div>
     </div>
+
+  <div class="col-6" *ngIf="showEditTestView == true">
     <div class="modal-content container mt-3 mb-3" style="width:600px;min-height:510px" *ngIf="showEditTestView == true">
-        <div class="row">
-          <label><b>Test Name</b></label>
-          <textarea type="text"  id="currentTestName">{{currentTest.name}}</textarea>
-          <label><b>Test Topic</b></label>
-          <textarea type="text"  id="currentTestTopic" style="height: 168px">{{currentTest.topic}}</textarea>
-          <label><b>Test Level</b></label>
-          <input type="number"  id="currentTestLevel"  value="{{currentTest.level}}"  required>
-          <div class="row justify-content-end mb-2">
-            <div class="col-5">
-              <button type="button" (click)="updateTest()">Update</button>
-            </div>
+      <div class="row justify-content-start">
+        <div class="col-2"><button (click)="closeCurrentTest()">Back</button></div>
+      </div>
+      <div class="row">
+        <label><b>Test Name</b></label>
+        <input type="text"  id="currentTestName" value="{{currentTest.name}}">
+        <label><b>Test Topic</b></label>
+        <input type="text"  id="currentTestName" value="{{currentTest.topic}}">
+        <label><b>Test Level</b></label>
+        <input type="number"  id="currentTestLevel"  value="{{currentTest.level}}"  required>
+        <div class="row justify-content-end mb-2">
+          <div class="col-5">
+            <button type="button" (click)="updateTest()">Update</button>
           </div>
         </div>
+      </div>
     </div>
   </div>
-  
+
+
+</div>
