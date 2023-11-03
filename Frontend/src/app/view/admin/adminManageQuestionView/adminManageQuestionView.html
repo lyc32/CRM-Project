@@ -1,40 +1,108 @@
-
-<div class="row m-1" *ngIf="showDeleteQuestionConfirmView == false">
+<div *ngIf="user.role=='admin' || user.role == 'super'">
+  <div class="row m-1" *ngIf="showDeleteQuestionConfirmView == false && showMessageView == false && showRemoveTestConfirmView == false">
     <!-- Question View -->
-    <div class="col-6">
-      <div class="modal-content container mt-3" style="width: 400px; height: 470px">
-        <label class="mt-2"><b>Question</b></label>
-          <input type="text" id="question" value="{{question.question}}" required />
-          <label class="mt-2"><b>Question Answer</b></label>
-          <input type="text" id="answer" value="{{question.answer}}" required />
-          <label><b>Question Style</b></label>
-          <input type="text" id="style" value="{{question.style}}" required />
-          <label><b>Points</b></label>
-          <input type="text" id="point" value="{{question.point}}" required />
-          <div class="row justify-content-end mb-2">
-            <div class="col-5">
-              <button type="button" style="background-color: #c44336" (click)="showDeleteQuestionConfirm(question)">
-                Delete
-              </button>
+    <div class="col-5 ms-4">
+      <div class="modal-content container mt-3 mb-3" style="width:600px;min-height:470px">
+        <div class="row" *ngIf="question.style=='Short Answer'">
+          <label><b>Question</b></label>
+          <textarea type="text"  id="currentQuestion" style="height: 200px;">{{question.question}}</textarea>
+          <label><b>Answer</b></label>
+          <textarea type="text"  id="currentAnswer">{{question.answer}}</textarea>
+          <div class="col-6">
+            <label><b>Point</b></label>
+            <input type="number"  id="currentPoint"  value="{{question.point}}"  required>
+          </div>
+          <div class="col-6">
+            <label><b>Time</b></label>
+            <input type="number"  id="currentTime"  value="{{question.time}}"  required>
+          </div>
+        </div>
+
+        <div class="row" *ngIf="question.style=='Single Choice'">
+          <label><b>Question</b></label>
+          <textarea type="text"  id="currentQuestion" style="height: 106px;">{{question.question}}</textarea>
+          <div class="row" style="min-height: 200px">
+            <div class="col-6 border-end">
+              <div class="row border-bottom">
+                <label id="currentBody"><i class="bi bi-plus-square" (click)="addCurrentChoice()"><b> Choice</b></i></label>
+              </div>
+              <span *ngFor="let c of currentChoiceList; let i = index" >
+            <input class="me-1" id="{{'currentChoice'+i}}" type="text" style="width:90%;height:20px" value="{{c}}" (change)="autoSaveCurrentChoice(i)"><i class="bi bi-dash-square" (click)="removeCurrentChoice(i)"></i>
+          </span>
+
             </div>
-            <div class="col-5">
-              <button type="button" (click)="update()">Update</button>
+            <div class="col-6">
+              <div class="row border-bottom">
+                <label id="currentAnswer"><b>Answer</b></label>
+              </div>
+              <div class="mt-1" *ngFor="let c of currentChoiceList; let i = index">
+                <input class="me-1" type="radio" name="answer" value="{{c}}" id="{{'selectedCurrentChoice' + i}}" *ngIf="isAnswer(i)" checked><label *ngIf="isAnswer(i)==true" >{{c}}</label>
+                <input class="me-1" type="radio" name="answer" value="{{c}}" id="{{'selectedCurrentChoice' + i}}" *ngIf="isAnswer(i)==false" ><label *ngIf="isAnswer(i)==false">{{c}}</label>
+              </div>
             </div>
           </div>
+          <div class="col-6">
+            <label><b>Point</b></label>
+            <input type="number"  id="currentPoint"  value="{{question.point}}"  required>
+          </div>
+          <div class="col-6">
+            <label><b>Time</b></label>
+            <input type="number"  id="currentTime"  value="{{question.time}}"  required>
+          </div>
+        </div>
+
+        <div class="row" *ngIf="question.style=='Multiple Choice'">
+          <label><b>Question</b></label>
+          <textarea type="text"  id="currentQuestion">{{question.question}}</textarea>
+          <div class="row" style="min-height: 200px">
+            <div class="col-6 border-end">
+              <div class="row border-bottom">
+                <label id="currentBody"><i class="bi bi-plus-square" (click)="addCurrentChoice()"><b> Choice</b></i></label>
+              </div>
+              <span *ngFor="let c of currentChoiceList; let i = index" >
+            <input class="me-1" id="{{'currentChoice'+i}}" type="text" style="width:90%;height:20px" value="{{c}}" (change)="autoSaveCurrentChoice(i)"><i class="bi bi-dash-square" (click)="removeCurrentChoice(i)"></i>
+          </span>
+            </div>
+            <div class="col-6">
+              <div class="row border-bottom">
+                <label id="currentAnswer"><b>Answer</b></label>
+              </div>
+              <div class="mt-1" *ngFor="let c of currentChoiceList; let i = index">
+                <input class="me-1" type="checkbox" name="answer" value="{{c}}" id="{{'selectedCurrentChoice' + i}}" *ngIf="isAnswer(i)" checked><label *ngIf="isAnswer(i)==true" >{{c}}</label>
+                <input class="me-1" type="checkbox" name="answer" value="{{c}}" id="{{'selectedCurrentChoice' + i}}" *ngIf="isAnswer(i)==false" ><label *ngIf="isAnswer(i)==false">{{c}}</label>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <label><b>Point</b></label>
+            <input type="number"  id="currentPoint"  value="{{question.point}}"  required>
+          </div>
+          <div class="col-6">
+            <label><b>Time</b></label>
+            <input type="number"  id="currentTime"  value="{{question.time}}"  required>
+          </div>
+        </div>
+
+        <div class="row justify-content-end">
+          <div class="col-3">
+            <button type="button" style="background-color: #C44336" (click)="showDeleteConfirm()" *ngIf="user.role=='super'">Delete</button>
+          </div>
+          <div class="col-3">
+            <button type="button" (click)="update()">Update</button>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- Question List -->
-    <div class="col-6" *ngIf="showEditTestView == false">
-      <div class="modal-content container mt-1" style="width:600px;height: 570px; overflow: auto" *ngIf="testList.length == 0">
-        <h1 class="text-secondary m-4">No Data</h1>
-      </div>
+    <!-- Test List -->
+    <div class="col-6" *ngIf="showEditTestView == false && showAddTestView == false && showAddExistTestView == false">
       <div class="modal-content container mt-1" style="width:600px;height: 570px; overflow: auto">
         <div class="row">
-          <div class="col-6"><button class="bg-secondary mt-2" (click)="showCreateQuestion()">Create A New Test</button></div>
-          <div class="col-6"><button class="bg-secondary mt-2">Add Exist Test</button></div>
+          <div class="col-6"><button class="bg-secondary mt-2" (click)="showAddTest()">Create A New Test</button></div>
+          <div class="col-6"><button class="bg-secondary mt-2" (click)="showAddExistTest()">Add Exist Test</button></div>
         </div>
-        <div style="width:600px;height: 470px; overflow: auto">
+        <div style="width:600px;height: 470px; overflow: auto"*ngIf="testList.length == 0"><h1 class="text-secondary">No Data</h1></div>
+        <div style="width:600px;height: 470px; overflow: auto" *ngIf="testList.length > 0">
           <div class="modal-content container mt-1 me-5" style="width: 530px"  *ngFor="let test of testList">
             <div class="row border-bottom ms-1 me-2">
               <div class="col-3 ms-2">
@@ -51,8 +119,9 @@
               </div>
               <div class="col-3 ms-2 me-2 ">
                 <div class="row mt-2">
-                  <button class="form-control btn btn-sm btn-outline-success pt-0" style="height:22px" (click)="showCurrentTest(test)">VIEW  </button>
-                  <button class="form-control btn btn-sm btn-outline-warning pt-0" style="height:22px" (click)="removeQuestionFromTest(test.id, question.id)" >REMOVE</button>
+                  <button class="form-control btn btn-sm btn-outline-primary pt-0" style="height:22px" (click)="testView(test.id)">VIEW  </button>
+                  <button class="form-control btn btn-sm btn-outline-success pt-0" style="height:22px" (click)="showCurrentTest(test)">UPDATE  </button>
+                  <button class="form-control btn btn-sm btn-outline-warning pt-0" style="height:22px" (click)="showRemoveTestConfirm(test)" *ngIf="user.role=='super'">REMOVE</button>
                 </div>
               </div>
             </div>
@@ -61,26 +130,162 @@
       </div>
     </div>
 
-  <div class="col-6" *ngIf="showEditTestView == true">
-    <div class="modal-content container mt-3 mb-3" style="width:600px;min-height:510px" *ngIf="showEditTestView == true">
-      <div class="row justify-content-start">
-        <div class="col-2"><button (click)="closeCurrentTest()">Back</button></div>
-      </div>
-      <div class="row">
-        <label><b>Test Name</b></label>
-        <input type="text"  id="currentTestName" value="{{currentTest.name}}">
-        <label><b>Test Topic</b></label>
-        <input type="text"  id="currentTestName" value="{{currentTest.topic}}">
-        <label><b>Test Level</b></label>
-        <input type="number"  id="currentTestLevel"  value="{{currentTest.level}}"  required>
-        <div class="row justify-content-end mb-2">
-          <div class="col-5">
-            <button type="button" (click)="updateTest()">Update</button>
+    <!-- Test Edit View -->
+    <div class="col-6" *ngIf="showEditTestView == true">
+      <div class="modal-content container mt-3 mb-3" style="width:600px;min-height:510px">
+        <div class="row justify-content-start">
+          <div class="col-2">
+            <button (click)="closeCurrentTest()">Back</button>
+          </div>
+          <div class="col-10 text-end">
+            <label class="switch_on me-5" >
+              <input type="checkbox" id="switch_btn1" checked="checked" (click)="swithcButton()">
+              <span id="switch_btn2" class="{{switch_on}}"></span>
+            </label>
+          </div>
+        </div>
+        <div class="row">
+          <label><b>Test Name</b></label>
+          <input type="text"  id="currentTestName" value="{{currentTest.name}}">
+          <label><b>Test Topic</b></label>
+          <input type="text"  id="currentTestTopic" value="{{currentTest.topic}}">
+          <label><b>Test Level</b></label>
+          <input type="number"  id="currentTestLevel"  value="{{currentTest.level}}"  required>
+          <div class="row justify-content-end mb-2">
+            <div class="col-5">
+              <button type="button" (click)="updateTest()">Update</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- Create Test View -->
+    <div class="col-6" *ngIf="showAddTestView == true">
+      <div class="modal-content container mt-2" style="width: 600px;min-height:510px">
+        <div class="row">
+          <div class="col-2 text-center">
+            <button (click)="closeAddTest()">Back</button>
+          </div>
+          <div class="col-8 text-center">
+            <h2 style="text-align:center;margin:20px 0 5px;">Add New Test</h2>
+          </div>
+        </div>
+
+        <div class="row mt-4">
+          <label><b>Topic</b></label>
+          <input id="newTopic" type="text" list="newTopiclist" value="{{newTest.topic}}" required>
+          <datalist id="newTopiclist">
+            <option *ngFor="let topic of topicList">{{topic.topic}}</option>
+          </datalist>
+          <label><b>Test Name</b></label>
+          <input type="text"  id="newName"  value="{{newTest.name}}" required>
+          <label><b>Level</b></label>
+          <input type="number" id="newLevel" value="{{newTest.level}}" required>
+        </div>
+
+        <div class="row justify-content-end">
+          <div class="col-3">
+            <button type="button" (click)="addNewTest()">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Exist Test -->
+    <div class="col-6" *ngIf="showAddExistTestView == true">
+      <div class="modal-content animate container mt-2" style="width: 700px;min-height:510px">
+        <div class="row">
+          <div class="col-2 text-center">
+            <button (click)="closeAddExistTest()">Back</button>
+          </div>
+          <div class="col-8 text-center">
+            <h2 style="text-align:center;margin:20px 0 5px;">Add Exist Test</h2>
+          </div>
+        </div>
+        <div class="row">
+          <div class=" card bg-secondary-subtle mt-2" style="width: 850px; height: 73px">
+            <div class="row mt-1 ms-0 me-0" style="height: 32px;">
+              <div class="h5 col-2 text-center">id</div>
+              <div class="h5 col-4 text-center">Test Name</div>
+              <div class="h5 col-4 text-center">Topic</div>
+              <div class="h5 col-2 text-center">Level</div>
+            </div>
+            <div class="row mt-0 ms-0 me-0" style="height: 32px;">
+              <div class="col-2"><input class="form-control mt-0 mb-1 pe-0" style="width:60px;height: 32px;" type="number" id="fitlerId"    value="{{filterTest.id   }}" (change)="filter()"></div>
+              <div class="col-4"><input class="form-control mt-0 mb-1" style="height: 32px;" type="text"   id="fitlerName"  value="{{filterTest.name }}" (change)="filter()"></div>
+              <div class="col-4"><input class="form-control mt-0 mb-1" style="height: 32px;" type="text"   id="fitlerTopic" value="{{filterTest.topic}}" (change)="filter()"></div>
+              <div class="col-2"><input class="form-control mt-0 mb-1" style="height: 32px;" type="number" id="fitlerLevel" value="{{filterTest.level}}" (change)="filter()"></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="height:300px; overflow: auto">
+          <div class="text-center text-secondary" *ngIf="currentExistTestList.length == 0"><h2>No Data</h2></div>
+          <div class="row border-bottom" *ngFor="let t of currentExistTestList">
+            <div class="col-1 justify-content-center border-end">
+              <label class="h6">{{'#' + t.id}}</label><br>
+              <input class="form-check-input mt-0 ms-0"  type="radio" name="questionID" id="{{t.id+'test'}}" style="width: 30px; height: 30px;" (change)="chooseExitTest(t)">
+            </div>
+            <div class="col-7 border-end">
+              <label class="h5">{{t.name}}</label><br>
+              <label class="h5 text-secondary">{{t.topic}}</label></div>
+            <div class="col-2 border-end">
+              <label>{{'level '+t.level}}</label><br>
+            </div>
+            <div class="col-2"><button class="btn btn-outline-success mt-3" (click)="testView(t.id)">View</button></div>
+          </div>
+        </div>
+
+        <div class="row justify-content-end">
+          <div class="col-3">
+            <button type="button" (click)="addSetIdToQuestion()">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
-
-
+  <!-- Remove Test-->
+  <div class="row mt-5" *ngIf="showRemoveTestConfirmView == true">
+    <div class="modal-content animate container mt-2" style="width: 600px">
+      <div class="row m-1">
+        <h4>Are You Sure To Remove Question From This Test?</h4>
+      </div>
+      <div class="row ms-1 me-1">
+        <div class="col-6">
+          <button type="button" (click)="removeQuestionFromTest()">Yes</button>
+        </div>
+        <div class="col-6">
+          <button type="button" style="background-color: #C44336" (click)="closeRemoveTestConfirm()">No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Delete Question-->
+  <div class="row mt-5" *ngIf="showDeleteQuestionConfirmView == true">
+    <div class="modal-content animate container mt-2" style="width: 600px">
+      <div class="row m-1">
+        <h4>Are You Sure To delete This Question?</h4>
+        <hr>
+        <label style="font-size: 5px">{{"#" + question.id}}</label>
+        <label style="font-size: 5px">{{question.question}}</label>
+        <hr>
+      </div>
+      <div class="row ms-1 me-1">
+        <div class="col-6">
+          <button type="button" (click)="delete()">Yes</button>
+        </div>
+        <div class="col-6">
+          <button type="button" style="background-color: #C44336" (click)="closeDeleteConfirm()">No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Message View -->
+  <div *ngIf="showMessageView == true">
+    <app-jump-page [message] = 'message' [error] = 'error'></app-jump-page>
+  </div>
 </div>
+
+

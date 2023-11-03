@@ -15,7 +15,10 @@ public interface TestRepository extends JpaRepository<Test, Long>
 {
     Optional<Test> findById(Long id);
 
-    @Query(value = "select t.id, t.topic, t.name, t.level, t.create_time, t.update_time FROM test_table t, question_to_tast_table qt where t.id = qt.test_id AND qt.question_id = ?1",nativeQuery = true)
+    @Query(value = "select * FROM test_table where state = 'active'",nativeQuery = true)
+    List<Test> findAllActiveTest();
+
+    @Query(value = "select t.id, t.topic, t.name, t.level, t.create_time, t.update_time, t.state FROM test_table t, question_to_tast_table qt where t.id = qt.test_id AND qt.question_id = ?1",nativeQuery = true)
     List<Test> getTestByQuestionId(Long id);
 
     @Query(value = "select * FROM test_table where id NOT IN (select t.id FROM test_table t, question_to_tast_table qt where t.id = qt.test_id AND qt.question_id = ?1 )",nativeQuery = true)

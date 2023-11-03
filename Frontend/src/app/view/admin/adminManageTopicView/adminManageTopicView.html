@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" *ngIf="user.role=='admin' || user.role == 'super'">
 
   <div class="row" *ngIf="showAddTopicView == false && showDeleteConfirmView == false && showMessageView == false">
     <div class="col-8">

@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" *ngIf="user.role=='admin' || user.role == 'super'">
   <div class="row" *ngIf="showAddTestView == false && showDeleteConfirmView == false && showNewTestView == false && showMessageView == false">
     <div class="col-8">
       <div class=" card bg-secondary-subtle mt-2" style="width: 850px; height: 73px">
@@ -28,8 +28,18 @@
       </div>
     </div>
     <div class="col-4">
-      <div class="modal-content container mt-3" style="width: 400px;height:360px" *ngIf="currentTest.id > 0">
-        <label><b>Topic</b></label>
+      <div class="modal-content container mt-3" style="width: 400px;height:390px" *ngIf="currentTest.id > 0">
+        <div class="row">
+          <div class="col-6">
+            <label><b>Topic</b></label>
+          </div>
+          <div class="col-6 text-end">
+            <label class="switch_on me-5" >
+              <input type="checkbox" id="switch_btn1" checked="checked" (click)="swithcButton()">
+              <span id="switch_btn2" class="{{switch_on}}"></span>
+            </label>
+          </div>
+        </div>
         <input type="text"  id="topic" list="topiclist" value="{{currentTest.topic}}" required>
         <datalist id="topiclist">
           <option *ngFor="let topic of topicList">{{topic.topic}}</option>
@@ -39,7 +49,7 @@
         <label><b>Level</b></label>
         <input type="text"  id="level" value="{{currentTest.level}}" required>
         <div class="row justify-content-end">
-          <div class="col-4">
+          <div class="col-4" *ngIf="user.role=='super'">
             <button type="button" style="background-color: #C44336" (click)="showDeleteConfirm()">Delete</button>
           </div>
           <div class="col-4">
@@ -50,12 +60,13 @@
           </div>
         </div>
       </div>
-      <div class="modal-content container mt-3 text-center" style="width: 400px;height:360px" *ngIf="currentTest.id <= 0">
+      <div class="modal-content container mt-3 text-center" style="width: 400px;height:390px" *ngIf="currentTest.id <= 0">
         <h1 class="text-secondary mt-5">No Data</h1>
       </div>
     </div>
   </div>
 
+  <!-- Add Test -->
   <div class="row" *ngIf="showAddTestView == true && showMessageView == false">
     <div class="modal-content animate container mt-2" style="width: 600px">
       <div class="row">
@@ -88,7 +99,8 @@
     </div>
   </div>
 
-  <div class="row" *ngIf="showDeleteConfirmView == true">
+  <!-- Delete Test -->
+  <div class="row mt-5" *ngIf="showDeleteConfirmView == true">
     <div class="modal-content animate container mt-2" style="width: 600px">
       <div class="row text-center m-4">
         <label class="h3"><b>Are You Sure To Delete This Test?</b></label>
@@ -104,6 +116,7 @@
     </div>
   </div>
 
+  <!-- after Add Test -->
   <div class="row" *ngIf="showNewTestView == true">
     <div class="modal-content animate container mt-2" style="width: 600px">
       <div class="row text-center m-4">
@@ -125,8 +138,4 @@
   <div *ngIf="showMessageView == true">
     <app-jump-page [message] = 'message' [error] = 'error'></app-jump-page>
   </div>
-
-
-
-
 </div>

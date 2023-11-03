@@ -1,480 +1,492 @@
-<div class="row" *ngIf="showMessageView == false && showDeleteConfirmView == false && showRemoveQuestionConfirmView == false && showDeleteQuestionConfirmView == false">
-  <!-- Test View-->
-  <div class="col-3">
-    <div class="row ms-2" >
-      <div class="modal-content container mt-3" style="width: 400px;height:400px">
-        <div class="row text-center" >
-          <label class="h5">{{'Test ID: ' + testId}}</label>
-        </div>
-        <label class="mt-2"><b>Topic</b></label>
-        <input type="text"  id="topic" value="{{test.topic}}" required>
-        <label><b>Test Name</b></label>
-        <input type="text"  id="name"  value="{{test.name}}" required>
-        <label><b>Level</b></label>
-        <input type="text"  id="level" value="{{test.level}}" required>
-        <div class="row justify-content-end mb-2">
-          <div class="col-5">
-            <button type="button" style="background-color: #C44336" (click) = "showDeleteConfirm()">Delete</button>
+<div *ngIf="user.role=='admin' || user.role == 'super'">
+  <div class="row" *ngIf="showMessageView == false && showDeleteConfirmView == false && showRemoveQuestionConfirmView == false && showDeleteQuestionConfirmView == false">
+    <!-- Test View-->
+    <div class="col-3">
+      <div class="row ms-2" >
+        <div class="modal-content container mt-3" style="width: 400px;height:425px">
+          <div class="row text-center" >
+            <div class="col-3 text-end">
+            </div>
+            <div class="col-6">
+              <label class="h5">{{'Test ID: ' + testId}}</label>
+            </div>
+            <div class="col-3 text-end">
+              <label class="switch_on me-5 pe-4" >
+                <input type="checkbox" id="switch_btn1" checked="checked" (click)="swithcButton()">
+                <span id="switch_btn2" class="{{switch_on}}"></span>
+              </label>
+            </div>
           </div>
-          <div class="col-5">
-            <button type="button" (click)="updateTest()">Update</button>
+          <label class="mt-2"><b>Topic</b></label>
+          <input type="text"  id="topic" value="{{test.topic}}" required>
+          <label><b>Test Name</b></label>
+          <input type="text"  id="name"  value="{{test.name}}" required>
+          <label><b>Level</b></label>
+          <input type="text"  id="level" value="{{test.level}}" required>
+          <div class="row justify-content-end mb-2">
+            <div class="col-5" *ngIf="user.role=='super'">
+              <button type="button" style="background-color: #C44336" (click) = "showDeleteConfirm()">Delete</button>
+            </div>
+            <div class="col-5">
+              <button type="button" (click)="updateTest()">Update</button>
+            </div>
           </div>
         </div>
+        <button class="bg-secondary mt-2" (click)="showCreateQuestion()">Create A New Question</button>
+        <button class="bg-secondary mt-2" (click)="showExistQuesiton()">Add Exist Questions</button>
       </div>
-      <button class="bg-secondary mt-2" (click)="showCreateQuestion()">Create A New Question</button>
-      <button class="bg-secondary mt-2" (click)="showExistQuesiton()">Add Exist Questions</button>
     </div>
-  </div>
-  <!-- Question List -->
-  <div class="col-5 mt-2"*ngIf="showAddExistQuesitonView == false">
-    <div class="modal-content container mt-1  ms-1" style="height:570px;width: 620px;" *ngIf="questionList.length == 0">
-      <h1 class="text-secondary">No Data</h1>
-    </div>
-    <div class="modal-content container mt-1  ms-1" style="height:570px;width: 620px; overflow: auto" *ngIf="questionList.length > 0">
-      <div class="modal-content container mt-1" style="width: 600px"  *ngFor="let question of questionList">
-        <div class="row border-bottom">
-          <div class="col-2">
-            <label class="h6">{{'#'+ question.id}}</label><br>
+    <!-- Question List -->
+    <div class="col-5 mt-2"*ngIf="showAddExistQuesitonView == false">
+      <div class="modal-content container mt-1  ms-1" style="height:570px;width: 620px;" *ngIf="questionList.length == 0">
+        <h1 class="text-secondary">No Data</h1>
+      </div>
+      <div class="modal-content container mt-1  ms-1" style="height:570px;width: 620px; overflow: auto" *ngIf="questionList.length > 0">
+        <div class="modal-content container mt-1" style="width: 600px"  *ngFor="let question of questionList">
+          <div class="row border-bottom">
+            <div class="col-2">
+              <label class="h6">{{'#'+ question.id}}</label><br>
+            </div>
+            <div class="col-6 text-center">
+              <label class="h6">{{question.style}}</label><br>
+            </div>
+            <div class="col-4">
+              <label class="h6">{{"points: " + question.point}}</label><br>
+            </div>
           </div>
-          <div class="col-6 text-center">
-            <label class="h6">{{question.style}}</label><br>
-          </div>
-          <div class="col-4">
-            <label class="h6">{{"points: " + question.point}}</label><br>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-8 border-end" style="height: 100px; overflow: auto">
-            <div class="m-2 h5">{{question.question}}</div>
-          </div>
-          <div class="col-3 ms-2 me-2" style="height: 105px">
-            <div class="row mt-2">
-              <button class="form-control btn btn-sm btn-outline-success pt-0" style="height:22px" (click)="showCurrentQuestion(question)"      >VIEW  </button>
-              <button class="form-control btn btn-sm btn-outline-primary pt-0" style="height:22px" (click)="openQuestionView(question.id)"      >DETAIL</button>
-              <button class="form-control btn btn-sm btn-outline-warning pt-0" style="height:22px" (click)="showRemoveQuestionConfirm(question)">REMOVE</button>
-              <button class="form-control btn btn-sm btn-outline-danger  pt-0" style="height:22px" (click)="showDeleteQuestionConfirm(question)">DELETE</button>
+          <div class="row">
+            <div class="col-8 border-end" style="height: 100px; overflow: auto">
+              <div class="m-2 h5">{{question.question}}</div>
+            </div>
+            <div class="col-3 ms-2 me-2" style="height: 105px">
+              <div class="row mt-2">
+                <button class="form-control btn btn-sm btn-outline-primary pt-0" style="height:22px" (click)="openQuestionView(question.id)"      >VIEW  </button>
+                <button class="form-control btn btn-sm btn-outline-success pt-0" style="height:22px" (click)="showCurrentQuestion(question)"      >UPDATE</button>
+                <button class="form-control btn btn-sm btn-outline-warning pt-0" style="height:22px" (click)="showRemoveQuestionConfirm(question)" *ngIf="user.role=='super' || questionList.length > 5">REMOVE</button>
+                <button class="form-control btn btn-sm btn-outline-danger  pt-0" style="height:22px" (click)="showDeleteQuestionConfirm(question)" *ngIf="user.role=='super'">DELETE</button>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <!-- Question Editor-->
-  <div class="col-4" *ngIf="showAddExistQuesitonView == false">
-    <!-- Edit Question -->
-    <div *ngIf="showEditQuestionView == true">
-      <div class="modal-content container mt-3 mb-3" style="width:600px;min-height:510px">
-        <div class="row" *ngIf="currentQuestion.style=='Short Answer'">
-          <label><b>Question</b></label>
-          <textarea type="text"  id="currentQuestion">{{currentQuestion.question}}</textarea>
-          <label><b>Answer</b></label>
-          <textarea type="text"  id="currentAnswer" >{{currentQuestion.answer}}</textarea>
-          <div class="col-6">
-            <label><b>Point</b></label>
-            <input type="number"  id="currentPoint"  value="{{currentQuestion.point}}"  required>
+    <!-- Question Editor-->
+    <div class="col-4" *ngIf="showAddExistQuesitonView == false">
+      <!-- Edit Question -->
+      <div *ngIf="showEditQuestionView == true">
+        <div class="modal-content container mt-3 mb-3" style="width:600px;min-height:510px">
+          <div class="row" *ngIf="currentQuestion.style=='Short Answer'">
+            <label><b>Question</b></label>
+            <textarea type="text"  id="currentQuestion">{{currentQuestion.question}}</textarea>
+            <label><b>Answer</b></label>
+            <textarea type="text"  id="currentAnswer" >{{currentQuestion.answer}}</textarea>
+            <div class="col-6">
+              <label><b>Point</b></label>
+              <input type="number"  id="currentPoint"  value="{{currentQuestion.point}}"  required>
+            </div>
+            <div class="col-6">
+              <label><b>Time</b></label>
+              <input type="number"  id="currentTime"   value="{{currentQuestion.time}}"  required>
+            </div>
           </div>
-          <div class="col-6">
-            <label><b>Time</b></label>
-            <input type="number"  id="currentTime"   value="{{currentQuestion.time}}"  required>
-          </div>
-        </div>
 
-        <div class="row" *ngIf="currentQuestion.style=='Single Choice'">
-          <label><b>Question</b></label>
-          <textarea type="text"  id="currentQuestion">{{currentQuestion.question}}</textarea>
-          <div class="row" style="min-height: 200px">
-            <div class="col-6 border-end">
-              <div class="row border-bottom">
-                <label id="currentBody"><i class="bi bi-plus-square"  (click)="addCurrentChoice()"><b> Choice</b></i></label>
-              </div>
-              <span *ngFor="let c of currentChoiceList; let i = index" >
+          <div class="row" *ngIf="currentQuestion.style=='Single Choice'">
+            <label><b>Question</b></label>
+            <textarea type="text"  id="currentQuestion">{{currentQuestion.question}}</textarea>
+            <div class="row" style="min-height: 200px">
+              <div class="col-6 border-end">
+                <div class="row border-bottom">
+                  <label id="currentBody"><i class="bi bi-plus-square"  (click)="addCurrentChoice()"><b> Choice</b></i></label>
+                </div>
+                <span *ngFor="let c of currentChoiceList; let i = index" >
             <input class="me-1" id="{{'currentChoice'+i}}" type="text" style="width:85%;height:20px" value="{{c}}" (change)="autoSaveCurrentChoice(i)"><i class="bi bi-dash-square" (click)="removeCurrentChoice(i)"></i>
           </span>
 
+              </div>
+              <div class="col-6">
+                <div class="row border-bottom">
+                  <label id="currentAnswer"><b>Answer</b></label>
+                </div>
+                <div class="mt-1" *ngFor="let c of currentChoiceList; let i = index">
+                  <input class="me-1" type="radio" name="answer" value="{{c}}" id="{{'selectedCurrentChoice' + i}}" *ngIf="isAnswer(i)" checked><label *ngIf="isAnswer(i)==true" >{{c}}</label>
+                  <input class="me-1" type="radio" name="answer" value="{{c}}" id="{{'selectedCurrentChoice' + i}}" *ngIf="isAnswer(i)==false" ><label *ngIf="isAnswer(i)==false">{{c}}</label>
+                </div>
+              </div>
             </div>
             <div class="col-6">
-              <div class="row border-bottom">
-                <label id="currentAnswer"><b>Answer</b></label>
-              </div>
-              <div class="mt-1" *ngFor="let c of currentChoiceList; let i = index">
-                <input class="me-1" type="radio" name="answer" value="{{c}}" id="{{'selectedCurrentChoice' + i}}" *ngIf="isAnswer(i)" checked><label *ngIf="isAnswer(i)==true" >{{c}}</label>
-                <input class="me-1" type="radio" name="answer" value="{{c}}" id="{{'selectedCurrentChoice' + i}}" *ngIf="isAnswer(i)==false" ><label *ngIf="isAnswer(i)==false">{{c}}</label>
-              </div>
+              <label><b>Point</b></label>
+              <input type="number"  id="currentPoint"  value="{{currentQuestion.point}}"  required>
+            </div>
+            <div class="col-6">
+              <label><b>Time</b></label>
+              <input type="number"  id="currentTime"   value="{{currentQuestion.time}}"  required>
             </div>
           </div>
-          <div class="col-6">
-            <label><b>Point</b></label>
-            <input type="number"  id="currentPoint"  value="{{currentQuestion.point}}"  required>
-          </div>
-          <div class="col-6">
-            <label><b>Time</b></label>
-            <input type="number"  id="currentTime"   value="{{currentQuestion.time}}"  required>
-          </div>
-        </div>
 
-        <div class="row" *ngIf="currentQuestion.style=='Multiple Choice'">
-          <label><b>Question</b></label>
-          <textarea type="text"  id="currentQuestion">{{currentQuestion.question}}</textarea>
-          <div class="row" style="min-height: 200px">
-            <div class="col-6 border-end">
-              <div class="row border-bottom">
-                <label id="currentBody"><i class="bi bi-plus-square"  (click)="addCurrentChoice()"><b> Choice</b></i></label>
-              </div>
-              <span *ngFor="let c of currentChoiceList; let i = index" >
+          <div class="row" *ngIf="currentQuestion.style=='Multiple Choice'">
+            <label><b>Question</b></label>
+            <textarea type="text"  id="currentQuestion">{{currentQuestion.question}}</textarea>
+            <div class="row" style="min-height: 200px">
+              <div class="col-6 border-end">
+                <div class="row border-bottom">
+                  <label id="currentBody"><i class="bi bi-plus-square"  (click)="addCurrentChoice()"><b> Choice</b></i></label>
+                </div>
+                <span *ngFor="let c of currentChoiceList; let i = index" >
             <input class="me-1" id="{{'currentChoice'+i}}" type="text" style="width:85%;height:20px" value="{{c}}" (change)="autoSaveCurrentChoice(i)"><i class="bi bi-dash-square"  (click)="removeCurrentChoice(i)"></i>
           </span>
+              </div>
+              <div class="col-6">
+                <div class="row border-bottom">
+                  <label id="currentAnswer"><b>Answer</b></label>
+                </div>
+                <div class="mt-1" *ngFor="let c of currentChoiceList; let i = index">
+                  <input class="me-1" type="checkbox" name="answer" value="{{c}}" id="{{'selectedCurrentChoice' + i}}" *ngIf="isAnswer(i)" checked><label *ngIf="isAnswer(i)==true" >{{c}}</label>
+                  <input class="me-1" type="checkbox" name="answer" value="{{c}}" id="{{'selectedCurrentChoice' + i}}" *ngIf="isAnswer(i)==false" ><label *ngIf="isAnswer(i)==false">{{c}}</label>
+                </div>
+              </div>
             </div>
             <div class="col-6">
-              <div class="row border-bottom">
-                <label id="currentAnswer"><b>Answer</b></label>
-              </div>
-              <div class="mt-1" *ngFor="let c of currentChoiceList; let i = index">
-                <input class="me-1" type="checkbox" name="answer" value="{{c}}" id="{{'selectedCurrentChoice' + i}}" *ngIf="isAnswer(i)" checked><label *ngIf="isAnswer(i)==true" >{{c}}</label>
-                <input class="me-1" type="checkbox" name="answer" value="{{c}}" id="{{'selectedCurrentChoice' + i}}" *ngIf="isAnswer(i)==false" ><label *ngIf="isAnswer(i)==false">{{c}}</label>
-              </div>
+              <label><b>Point</b></label>
+              <input type="number"  id="currentPoint"  value="{{currentQuestion.point}}"  required>
+            </div>
+            <div class="col-6">
+              <label><b>Time</b></label>
+              <input type="number"  id="currentTime"   value="{{currentQuestion.time}}"  required>
             </div>
           </div>
-          <div class="col-6">
-            <label><b>Point</b></label>
-            <input type="number"  id="currentPoint"  value="{{currentQuestion.point}}"  required>
-          </div>
-          <div class="col-6">
-            <label><b>Time</b></label>
-            <input type="number"  id="currentTime"   value="{{currentQuestion.time}}"  required>
-          </div>
-        </div>
 
-        <div class="row justify-content-end">
-          <div class="col-3">
-            <button type="button" (click)="update()">Update</button>
+          <div class="row justify-content-end">
+            <div class="col-3">
+              <button type="button" (click)="update()">Update</button>
+            </div>
           </div>
         </div>
       </div>
+      <!-- New Question -->
+      <div *ngIf="showCreateNewQuestionView==true">
+        <div class="modal-content container mt-3 mb-3" style="width:600px;min-height:510px" *ngIf="newQuestion.style==''">
+          <div class="row">
+            <div class="col-12 text-center">
+              <div class="mt-4">
+                <h2 style="text-align:center;margin:20px 0 5px;">Please Choose Question Type</h2>
+                <select class="mt-2 text-center" id="newQuestionStyle" (change)="getNewQuestionType()">
+                  <option value="" >Choose Question Type</option>
+                  <option value="Single Choice"  >Single Choice</option>
+                  <option value="Multiple Choice">Multiple Choice</option>
+                  <option value="Short Answer"   >Short Answer</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-content container mt-3 mb-3" style="width:600px;min-height:510px" *ngIf="newQuestion.style!=''">
+          <div class="row mt-0">
+            <div class="col-2 text-center">
+              <button class="btn btn-success btn-sm" (click)="removeQuestionType()"><-</button>
+            </div>
+            <div class="col-8 text-center">
+              <h4 style="text-align:center;margin:20px 0 5px;">{{'New ' + newQuestion.style}}</h4>
+            </div>
+          </div>
+
+          <div class="row" *ngIf="newQuestion.style=='Short Answer'">
+            <label><b>Question</b></label>
+            <textarea type="text"  id="newQuestion">{{newQuestion.question}}</textarea>
+            <label><b>Answer</b></label>
+            <textarea type="text"  id="newAnswer">{{newQuestion.answer}}</textarea>
+            <div class="col-6">
+              <label><b>Point</b></label>
+              <input type="number"  id="newPoint"  value="{{newQuestion.point}}"  required>
+            </div>
+            <div class="col-6">
+              <label><b>Time</b></label>
+              <input type="number"  id="newTime"   value="{{newQuestion.time}}"  required>
+            </div>
+          </div>
+
+          <div class="row" *ngIf="newQuestion.style=='Single Choice'">
+            <label><b>Question</b></label>
+            <textarea type="text"  id="newQuestion">{{newQuestion.question}}</textarea>
+            <div class="row" style="min-height: 200px">
+              <div class="col-6 border-end">
+                <div class="row border-bottom">
+                  <label id="newBody"><i class="bi bi-plus-square" (click)="addChoice()"><b> Choice</b></i></label>
+                </div>
+                <span *ngFor="let c of choiceList; let i = index" >
+            <input class="me-1" id="{{'choice'+i}}" type="text" style="width:85%;height:20px" value="{{c}}" (change)="autoSaveChoice(i)"><i class="bi bi-dash-square" (click)="removeChoice(i)"></i>
+          </span>
+
+              </div>
+              <div class="col-6">
+                <div class="row border-bottom">
+                  <label id="newAnswer"><b>Answer</b></label>
+                </div>
+                <div class="mt-1" *ngFor="let c of choiceList; let i = index">
+                  <input class="me-1" type="radio" name="answer" value="{{c}}" id="{{'selectedChoice' + i}}"><label>{{c}}</label>
+                </div>
+              </div>
+            </div>
+            <div class="col-6">
+              <label><b>Point</b></label>
+              <input type="number"  id="newPoint"  value="{{newQuestion.point}}"  required>
+            </div>
+            <div class="col-6">
+              <label><b>Time</b></label>
+              <input type="number"  id="newTime"   value="{{newQuestion.time}}"  required>
+            </div>
+          </div>
+
+          <div class="row" *ngIf="newQuestion.style=='Multiple Choice'">
+            <label><b>Question</b></label>
+            <textarea type="text"  id="newQuestion">{{newQuestion.question}}</textarea>
+            <div class="row" style="min-height: 200px">
+              <div class="col-6 border-end">
+                <div class="row border-bottom">
+                  <label id="newBody"><i class="bi bi-plus-square" (click)="addChoice()"><b> Choice</b></i></label>
+                </div>
+                <span *ngFor="let c of choiceList; let i = index" >
+            <input class="me-1" id="{{'choice'+i}}" type="text" style="width:85%;height:20px" value="{{c}}" (change)="autoSaveChoice(i)"><i class="bi bi-dash-square" (click)="removeChoice(i)"></i>
+          </span>
+
+              </div>
+              <div class="col-6">
+                <div class="row border-bottom">
+                  <label id="newAnswer"><b>Answer</b></label>
+                </div>
+                <div class="mt-1" *ngFor="let c of choiceList; let i = index">
+                  <input class="me-1" type="checkbox" name="answer" value="{{c}}" id="{{'selectedChoice' + i}}"><label>{{c}}</label>
+                </div>
+              </div>
+            </div>
+            <div class="col-6">
+              <label><b>Point</b></label>
+              <input type="number"  id="newPoint"  value="{{newQuestion.point}}"  required>
+            </div>
+            <div class="col-6">
+              <label><b>Time</b></label>
+              <input type="number"  id="newTime"   value="{{newQuestion.time}}"  required>
+            </div>
+          </div>
+
+          <div class="row justify-content-end">
+            <div class="col-3">
+              <button type="button" (click)="submit()">Submit</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- No Data -->
+      <div *ngIf="showAddExistQuesitonView == false && showCreateNewQuestionView==false && showEditQuestionView==false">
+        <div class="modal-content container mt-3 mb-3" style="width:600px;min-height:510px" *ngIf="newQuestion.style==''">
+          <h1 class="text-secondary">No Data</h1>
+        </div>
+      </div>
     </div>
-    <!-- New Question -->
-    <div *ngIf="showCreateNewQuestionView==true">
-      <div class="modal-content container mt-3 mb-3" style="width:600px;min-height:510px" *ngIf="newQuestion.style==''">
-        <div class="row">
-          <div class="col-12 text-center">
-            <div class="mt-4">
-              <h2 style="text-align:center;margin:20px 0 5px;">Please Choose Question Type</h2>
-              <select class="mt-2 text-center" id="newQuestionStyle" (change)="getNewQuestionType()">
-                <option value="" >Choose Question Type</option>
+    <!-- Exist Question -->
+    <div class="col-9" *ngIf="showAddExistQuesitonView == true">
+      <div class="row ms-2 me-2" *ngIf="showExistCurrentQuestionView==false">
+        <div class="modal-content container mt-3 mb-3 me-2" style="width: 100%;">
+          <div class="row mt-0 ">
+            <div class="col-2 text-center">
+              <button (click)="closeExistQuestion()">Back</button>
+            </div>
+            <div class="col-8 text-center">
+              <h4 style="text-align:center;margin:20px 0 5px;">Search Questions</h4>
+            </div>
+          </div>
+          <div class="row mt-0 mb-0 text-center">
+            <div class="col-1 mt-4"><label class="h5">ID</label></div>
+            <div class="col-2 mt-4"><label class="h5">Question</label></div>
+            <div class="col-2 mt-4"><label class="h5">Style</label></div>
+            <div class="col-1 mt-4"><label class="h5">Point</label></div>
+            <div class="col-2 mt-4"><label class="h5">Topic</label></div>
+            <div class="col-2 mt-4"><label class="h5">Test</label></div>
+            <div class="col-2"><button (click)="search()">Search</button></div>
+          </div>
+          <div class="row mt-0">
+            <div class="col-1"><input class="form-control" id="searchQid"     ></div>
+            <div class="col-2"><input class="form-control" id="searchQuestion"></div>
+            <div class="col-2">
+              <select class="form-control mt-0" id="searchStyle">
+                <option value="" ></option>
                 <option value="Single Choice"  >Single Choice</option>
                 <option value="Multiple Choice">Multiple Choice</option>
                 <option value="Short Answer"   >Short Answer</option>
               </select>
             </div>
+            <div class="col-1"><input class="form-control" id="searchPoint"    ></div>
+            <div class="col-2"><input class="form-control" id="searchTopic"   ></div>
+            <div class="col-2"><input class="form-control" id="searchTest"    ></div>
+            <div class="col-2"><input class="form-check-input mt-0"  type="checkbox" id="searchCheckBox"><label class="h5 ms-1">Not In Test</label></div>
+          </div>
+          <hr>
+          <div style="height:220px; overflow: auto">
+            <div class="text-center text-secondary" *ngIf="searchQuestionList.length == 0"><h2>No Data</h2></div>
+            <div class="row border-bottom" *ngFor="let q of searchQuestionList">
+              <div class="col-1 justify-content-center">
+                <label class="h6">{{'#' + q.id}}</label><br>
+                <input class="form-check-input mt-0 ms-4"  type="radio" name="questionID" id="{{q.id+'question'}}" style="width: 30px; height: 30px;" (change)="chooseExitQuestion(q)">
+              </div>
+              <div class="col-7"><textarea class="form-control ">{{q.question}}</textarea></div>
+              <div class="col-2">
+                <label>{{q.style}}</label><br>
+                <label>{{'point: ' + q.point}}</label><br>
+                <label>{{'time: ' + q.time}}</label><br>
+              </div>
+              <div class="col-1"><button class="btn btn-outline-success mt-3" (click)="showExistCurrentQuestion(q)">View</button></div>
+              <div class="col-1"><button class="btn btn-outline-primary mt-3" (click)="openQuestionView(q.id)">Detail</button></div>
+            </div>
+          </div>
+          <hr>
+          <div class="row justify-content-end" style="height: 60px;">
+            <div class="col-4">
+              <button (click)="addQuestionIdToSet()">Add To Test</button>
+            </div>
           </div>
         </div>
       </div>
-      <div class="modal-content container mt-3 mb-3" style="width:600px;min-height:510px" *ngIf="newQuestion.style!=''">
-        <div class="row mt-0">
-          <div class="col-2 text-center">
-            <button class="btn btn-success btn-sm" (click)="removeQuestionType()"><-</button>
+      <div class="row ms-2 me-2" *ngIf="showExistCurrentQuestionView==true">
+        <div class="modal-content animate container mt-3 mb-3" style="width:600px;min-height:470px">
+          <div class="row">
+            <div class="col-2 text-center">
+              <button (click)="closeExistCurrentQuestion()">Back</button>
+            </div>
           </div>
-          <div class="col-8 text-center">
-            <h4 style="text-align:center;margin:20px 0 5px;">{{'New ' + newQuestion.style}}</h4>
-          </div>
-        </div>
-
-        <div class="row" *ngIf="newQuestion.style=='Short Answer'">
-          <label><b>Question</b></label>
-          <textarea type="text"  id="newQuestion">{{newQuestion.question}}</textarea>
-          <label><b>Answer</b></label>
-          <textarea type="text"  id="newAnswer">{{newQuestion.answer}}</textarea>
-          <div class="col-6">
-            <label><b>Point</b></label>
-            <input type="number"  id="newPoint"  value="{{newQuestion.point}}"  required>
-          </div>
-          <div class="col-6">
-            <label><b>Time</b></label>
-            <input type="number"  id="newTime"   value="{{newQuestion.time}}"  required>
-          </div>
-        </div>
-
-        <div class="row" *ngIf="newQuestion.style=='Single Choice'">
-          <label><b>Question</b></label>
-          <textarea type="text"  id="newQuestion">{{newQuestion.question}}</textarea>
-          <div class="row" style="min-height: 200px">
-            <div class="col-6 border-end">
-              <div class="row border-bottom">
-                <label id="newBody"><i class="bi bi-plus-square" (click)="addChoice()"><b> Choice</b></i></label>
-              </div>
-              <span *ngFor="let c of choiceList; let i = index" >
-            <input class="me-1" id="{{'choice'+i}}" type="text" style="width:85%;height:20px" value="{{c}}" (change)="autoSaveChoice(i)"><i class="bi bi-dash-square" (click)="removeChoice(i)"></i>
-          </span>
-
+          <div class="row" *ngIf="currentQuestion.style=='Short Answer'">
+            <label><b>Question</b></label>
+            <textarea type="text"  id="currentQuestion">{{currentQuestion.question}}</textarea>
+            <label><b>Answer</b></label>
+            <textarea type="text"  id="currentAnswer">{{currentQuestion.answer}}</textarea>
+            <div class="col-6">
+              <label><b>Point</b></label>
+              <input type="number"  id="currentPoint"  value="{{currentQuestion.point}}"  required>
             </div>
             <div class="col-6">
-              <div class="row border-bottom">
-                <label id="newAnswer"><b>Answer</b></label>
-              </div>
-              <div class="mt-1" *ngFor="let c of choiceList; let i = index">
-                <input class="me-1" type="radio" name="answer" value="{{c}}" id="{{'selectedChoice' + i}}"><label>{{c}}</label>
-              </div>
+              <label><b>Time</b></label>
+              <input type="number"  id="currentTime"  value="{{currentQuestion.point}}"  required>
             </div>
           </div>
-          <div class="col-6">
-            <label><b>Point</b></label>
-            <input type="number"  id="newPoint"  value="{{newQuestion.point}}"  required>
-          </div>
-          <div class="col-6">
-            <label><b>Time</b></label>
-            <input type="number"  id="newTime"   value="{{newQuestion.time}}"  required>
-          </div>
-        </div>
 
-        <div class="row" *ngIf="newQuestion.style=='Multiple Choice'">
-          <label><b>Question</b></label>
-          <textarea type="text"  id="newQuestion">{{newQuestion.question}}</textarea>
-          <div class="row" style="min-height: 200px">
-            <div class="col-6 border-end">
-              <div class="row border-bottom">
-                <label id="newBody"><i class="bi bi-plus-square" (click)="addChoice()"><b> Choice</b></i></label>
-              </div>
-              <span *ngFor="let c of choiceList; let i = index" >
-            <input class="me-1" id="{{'choice'+i}}" type="text" style="width:85%;height:20px" value="{{c}}" (change)="autoSaveChoice(i)"><i class="bi bi-dash-square" (click)="removeChoice(i)"></i>
-          </span>
-
-            </div>
-            <div class="col-6">
-              <div class="row border-bottom">
-                <label id="newAnswer"><b>Answer</b></label>
-              </div>
-              <div class="mt-1" *ngFor="let c of choiceList; let i = index">
-                <input class="me-1" type="checkbox" name="answer" value="{{c}}" id="{{'selectedChoice' + i}}"><label>{{c}}</label>
-              </div>
-            </div>
-          </div>
-          <div class="col-6">
-            <label><b>Point</b></label>
-            <input type="number"  id="newPoint"  value="{{newQuestion.point}}"  required>
-          </div>
-          <div class="col-6">
-            <label><b>Time</b></label>
-            <input type="number"  id="newTime"   value="{{newQuestion.time}}"  required>
-          </div>
-        </div>
-
-        <div class="row justify-content-end">
-          <div class="col-3">
-            <button type="button" (click)="submit()">Submit</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- No Data -->
-    <div *ngIf="showAddExistQuesitonView == false && showCreateNewQuestionView==false && showEditQuestionView==false">
-      <div class="modal-content container mt-3 mb-3" style="width:600px;min-height:510px" *ngIf="newQuestion.style==''">
-        <h1 class="text-secondary">No Data</h1>
-      </div>
-    </div>
-  </div>
-  <!-- Exist Question -->
-  <div class="col-9" *ngIf="showAddExistQuesitonView == true">
-    <div class="row ms-2 me-2" *ngIf="showExistCurrentQuestionView==false">
-      <div class="modal-content container mt-3 mb-3 me-2" style="width: 100%;">
-        <div class="row mt-0 ">
-          <div class="col-2 text-center">
-            <button (click)="closeExistQuestion()">Back</button>
-          </div>
-          <div class="col-8 text-center">
-            <h4 style="text-align:center;margin:20px 0 5px;">Search Questions</h4>
-          </div>
-        </div>
-        <div class="row mt-0 mb-0 text-center">
-          <div class="col-1 mt-4"><label class="h5">ID</label></div>
-          <div class="col-2 mt-4"><label class="h5">Question</label></div>
-          <div class="col-2 mt-4"><label class="h5">Style</label></div>
-          <div class="col-1 mt-4"><label class="h5">Point</label></div>
-          <div class="col-2 mt-4"><label class="h5">Topic</label></div>
-          <div class="col-2 mt-4"><label class="h5">Test</label></div>
-          <div class="col-2"><button (click)="search()">Search</button></div>
-        </div>
-        <div class="row mt-0">
-          <div class="col-1"><input class="form-control" id="searchQid"     ></div>
-          <div class="col-2"><input class="form-control" id="searchQuestion"></div>
-          <div class="col-2">
-            <select class="form-control mt-0" id="searchStyle">
-              <option value="" ></option>
-              <option value="Single Choice"  >Single Choice</option>
-              <option value="Multiple Choice">Multiple Choice</option>
-              <option value="Short Answer"   >Short Answer</option>
-            </select>
-          </div>
-          <div class="col-1"><input class="form-control" id="searchPoint"    ></div>
-          <div class="col-2"><input class="form-control" id="searchTopic"   ></div>
-          <div class="col-2"><input class="form-control" id="searchTest"    ></div>
-          <div class="col-2"><input class="form-check-input mt-0"  type="checkbox" id="searchCheckBox"><label class="h5 ms-1">Not In Test</label></div>
-        </div>
-        <hr>
-        <div style="height:220px; overflow: auto">
-          <div class="text-center text-secondary" *ngIf="searchQuestionList.length == 0"><h2>No Data</h2></div>
-          <div class="row border-bottom" *ngFor="let q of searchQuestionList">
-            <div class="col-1 justify-content-center">
-              <label class="h6">{{'#' + q.id}}</label><br>
-              <input class="form-check-input mt-0 ms-4"  type="radio" name="questionID" id="{{q.id+'question'}}" style="width: 30px; height: 30px;" (change)="chooseExitQuestion(q)">
-            </div>
-            <div class="col-7"><textarea class="form-control ">{{q.question}}</textarea></div>
-            <div class="col-2">
-              <label>{{q.style}}</label><br>
-              <label>{{'point: ' + q.point}}</label><br>
-              <label>{{'time: ' + q.time}}</label><br>
-            </div>
-            <div class="col-1"><button class="btn btn-outline-success mt-3" (click)="showExistCurrentQuestion(q)">View</button></div>
-            <div class="col-1"><button class="btn btn-outline-primary mt-3" (click)="openQuestionView(q.id)">Detail</button></div>
-          </div>
-        </div>
-        <hr>
-        <div class="row justify-content-end" style="height: 60px;">
-          <div class="col-4">
-            <button (click)="addQuestionIdToSet()">Add To Test</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="row ms-2 me-2" *ngIf="showExistCurrentQuestionView==true">
-      <div class="modal-content animate container mt-3 mb-3" style="width:600px;min-height:470px">
-        <div class="row">
-          <div class="col-2 text-center">
-            <button (click)="closeExistCurrentQuestion()">Back</button>
-          </div>
-        </div>
-        <div class="row" *ngIf="currentQuestion.style=='Short Answer'">
-          <label><b>Question</b></label>
-          <textarea type="text"  id="currentQuestion">{{currentQuestion.question}}</textarea>
-          <label><b>Answer</b></label>
-          <textarea type="text"  id="currentAnswer">{{currentQuestion.answer}}</textarea>
-          <div class="col-6">
-            <label><b>Point</b></label>
-            <input type="number"  id="currentPoint"  value="{{currentQuestion.point}}"  required>
-          </div>
-          <div class="col-6">
-            <label><b>Time</b></label>
-            <input type="number"  id="currentTime"  value="{{currentQuestion.point}}"  required>
-          </div>
-        </div>
-
-        <div class="row" *ngIf="currentQuestion.style=='Single Choice'">
-          <label><b>Question</b></label>
-          <textarea type="text"  id="currentQuestion">{{currentQuestion.question}}</textarea>
-          <div class="row" style="min-height: 200px">
-            <div class="col-6 border-end">
-              <div class="row border-bottom">
-                <label id="currentBody"><i class="bi bi-plus-square" (click)="addCurrentChoice()"><b> Choice</b></i></label>
-              </div>
-              <span *ngFor="let c of currentChoiceList; let i = index" >
+          <div class="row" *ngIf="currentQuestion.style=='Single Choice'">
+            <label><b>Question</b></label>
+            <textarea type="text"  id="currentQuestion">{{currentQuestion.question}}</textarea>
+            <div class="row" style="min-height: 200px">
+              <div class="col-6 border-end">
+                <div class="row border-bottom">
+                  <label id="currentBody"><i class="bi bi-plus-square" (click)="addCurrentChoice()"><b> Choice</b></i></label>
+                </div>
+                <span *ngFor="let c of currentChoiceList; let i = index" >
             <input class="me-1" id="{{'currentChoice'+i}}" type="text" style="width:90%;height:20px" value="{{c}}" (change)="autoSaveCurrentChoice(i)"><i class="bi bi-dash-square" (click)="removeCurrentChoice(i)"></i>
           </span>
 
-            </div>
-            <div class="col-6">
-              <div class="row border-bottom">
-                <label id="currentAnswer"><b>Answer</b></label>
               </div>
-              <div class="mt-1" *ngFor="let c of currentChoiceList; let i = index">
-                <input class="me-1" type="radio" name="answer" value="{{c}}" id="{{'selectedCurrentChoice' + i}}" *ngIf="isAnswer(i)" checked><label *ngIf="isAnswer(i)==true" >{{c}}</label>
-                <input class="me-1" type="radio" name="answer" value="{{c}}" id="{{'selectedCurrentChoice' + i}}" *ngIf="isAnswer(i)==false" ><label *ngIf="isAnswer(i)==false">{{c}}</label>
-              </div>
-            </div>
-          </div>
-          <label><b>Point</b></label>
-          <input type="number"  id="currentPoint"  value="{{currentQuestion.point}}"  required>
-        </div>
-
-        <div class="row" *ngIf="currentQuestion.style=='Multiple Choice'">
-          <label><b>Question</b></label>
-          <textarea type="text"  id="currentQuestion">{{currentQuestion.question}}</textarea>
-          <div class="row" style="min-height: 200px">
-            <div class="col-6 border-end">
-              <div class="row border-bottom">
-                <label id="currentBody"><i class="bi bi-plus-square" (click)="addCurrentChoice()"><b> Choice</b></i></label>
-              </div>
-              <span *ngFor="let c of currentChoiceList; let i = index" >
-            <input class="me-1" id="{{'currentChoice'+i}}" type="text" style="width:90%;height:20px" value="{{c}}" (change)="autoSaveCurrentChoice(i)"><i class="bi bi-dash-square" (click)="removeCurrentChoice(i)"></i>
-          </span>
-            </div>
-            <div class="col-6">
-              <div class="row border-bottom">
-                <label id="currentAnswer"><b>Answer</b></label>
-              </div>
-              <div class="mt-1" *ngFor="let c of currentChoiceList; let i = index">
-                <input class="me-1" type="checkbox" name="answer" value="{{c}}" id="{{'selectedCurrentChoice' + i}}" *ngIf="isAnswer(i)" checked><label *ngIf="isAnswer(i)==true" >{{c}}</label>
-                <input class="me-1" type="checkbox" name="answer" value="{{c}}" id="{{'selectedCurrentChoice' + i}}" *ngIf="isAnswer(i)==false" ><label *ngIf="isAnswer(i)==false">{{c}}</label>
+              <div class="col-6">
+                <div class="row border-bottom">
+                  <label id="currentAnswer"><b>Answer</b></label>
+                </div>
+                <div class="mt-1" *ngFor="let c of currentChoiceList; let i = index">
+                  <input class="me-1" type="radio" name="answer" value="{{c}}" id="{{'selectedCurrentChoice' + i}}" *ngIf="isAnswer(i)" checked><label *ngIf="isAnswer(i)==true" >{{c}}</label>
+                  <input class="me-1" type="radio" name="answer" value="{{c}}" id="{{'selectedCurrentChoice' + i}}" *ngIf="isAnswer(i)==false" ><label *ngIf="isAnswer(i)==false">{{c}}</label>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="col-6">
             <label><b>Point</b></label>
             <input type="number"  id="currentPoint"  value="{{currentQuestion.point}}"  required>
           </div>
-          <div class="col-6">
-            <label><b>Time</b></label>
-            <input type="number"  id="currentTime"  value="{{currentQuestion.time}}"  required>
+
+          <div class="row" *ngIf="currentQuestion.style=='Multiple Choice'">
+            <label><b>Question</b></label>
+            <textarea type="text"  id="currentQuestion">{{currentQuestion.question}}</textarea>
+            <div class="row" style="min-height: 200px">
+              <div class="col-6 border-end">
+                <div class="row border-bottom">
+                  <label id="currentBody"><i class="bi bi-plus-square" (click)="addCurrentChoice()"><b> Choice</b></i></label>
+                </div>
+                <span *ngFor="let c of currentChoiceList; let i = index" >
+            <input class="me-1" id="{{'currentChoice'+i}}" type="text" style="width:90%;height:20px" value="{{c}}" (change)="autoSaveCurrentChoice(i)"><i class="bi bi-dash-square" (click)="removeCurrentChoice(i)"></i>
+          </span>
+              </div>
+              <div class="col-6">
+                <div class="row border-bottom">
+                  <label id="currentAnswer"><b>Answer</b></label>
+                </div>
+                <div class="mt-1" *ngFor="let c of currentChoiceList; let i = index">
+                  <input class="me-1" type="checkbox" name="answer" value="{{c}}" id="{{'selectedCurrentChoice' + i}}" *ngIf="isAnswer(i)" checked><label *ngIf="isAnswer(i)==true" >{{c}}</label>
+                  <input class="me-1" type="checkbox" name="answer" value="{{c}}" id="{{'selectedCurrentChoice' + i}}" *ngIf="isAnswer(i)==false" ><label *ngIf="isAnswer(i)==false">{{c}}</label>
+                </div>
+              </div>
+            </div>
+            <div class="col-6">
+              <label><b>Point</b></label>
+              <input type="number"  id="currentPoint"  value="{{currentQuestion.point}}"  required>
+            </div>
+            <div class="col-6">
+              <label><b>Time</b></label>
+              <input type="number"  id="currentTime"  value="{{currentQuestion.time}}"  required>
+            </div>
+
           </div>
 
-        </div>
-
-        <div class="row justify-content-end">
-          <div class="col-3">
-            <button type="button" (click)="update()">Update</button>
+          <div class="row justify-content-end">
+            <div class="col-3">
+              <button type="button" (click)="update()">Update</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+  <!-- Remove Question Confirm View-->
+  <div class="row mt-5" *ngIf="showDeleteQuestionConfirmView == true">
+    <div class="modal-content animate container mt-2" style="width: 600px">
+      <div class="row text-center m-4">
+        <label class="h3"><b>Do You Want To Delete This Question?</b></label>
+      </div>
+      <div class="row">
+        <div class="col-6">
+          <button type="button" style="background-color: #C44336" (click)="delete()">Yes</button>
+        </div>
+        <div class="col-6">
+          <button type="button" (click)="closeDeleteQuestionConfirm()">No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Remove Question Confirm View-->
+  <div class="row mt-5" *ngIf="showRemoveQuestionConfirmView == true">
+    <div class="modal-content animate container mt-2" style="width: 600px">
+      <div class="row text-center m-4">
+        <label class="h3"><b>Do You Want To Remove This Question?</b></label>
+      </div>
+      <div class="row">
+        <div class="col-6">
+          <button type="button" style="background-color: #C44336" (click)="remove()">Yes</button>
+        </div>
+        <div class="col-6">
+          <button type="button" (click)="closeRemoveQuestionConfirm()">No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Delete Test Confirm View-->
+  <div class="row mt-5" *ngIf="showDeleteConfirmView == true">
+    <div class="modal-content animate container mt-2" style="width: 600px">
+      <div class="row text-center m-4">
+        <label class="h3"><b>Are You Sure To Delete This Test?</b></label>
+      </div>
+      <div class="row">
+        <div class="col-6">
+          <button type="button" style="background-color: #C44336" (click)="deleteTest()">Yes</button>
+        </div>
+        <div class="col-6">
+          <button type="button" (click)="closeDeleteConfirm()">No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Message View -->
+  <div *ngIf="showMessageView == true">
+    <app-jump-page [message] = 'message' [error] = 'error'></app-jump-page>
+  </div>
 </div>
 
-<!-- Remove Question Confirm View-->
-<div class="row mt-5" *ngIf="showDeleteQuestionConfirmView == true">
-  <div class="modal-content animate container mt-2" style="width: 600px">
-    <div class="row text-center m-4">
-      <label class="h3"><b>Do You Want To Delete This Question?</b></label>
-    </div>
-    <div class="row">
-      <div class="col-6">
-        <button type="button" style="background-color: #C44336" (click)="delete()">Yes</button>
-      </div>
-      <div class="col-6">
-        <button type="button" (click)="closeDeleteQuestionConfirm()">No</button>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- Remove Question Confirm View-->
-<div class="row mt-5" *ngIf="showRemoveQuestionConfirmView == true">
-  <div class="modal-content animate container mt-2" style="width: 600px">
-    <div class="row text-center m-4">
-      <label class="h3"><b>Do You Want To Remove This Question?</b></label>
-    </div>
-    <div class="row">
-      <div class="col-6">
-        <button type="button" style="background-color: #C44336" (click)="remove()">Yes</button>
-      </div>
-      <div class="col-6">
-        <button type="button" (click)="closeRemoveQuestionConfirm()">No</button>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- Delete Test Confirm View-->
-<div class="row mt-5" *ngIf="showDeleteConfirmView == true">
-  <div class="modal-content animate container mt-2" style="width: 600px">
-    <div class="row text-center m-4">
-      <label class="h3"><b>Are You Sure To Delete This Test?</b></label>
-    </div>
-    <div class="row">
-      <div class="col-6">
-        <button type="button" style="background-color: #C44336" (click)="deleteTest()">Yes</button>
-      </div>
-      <div class="col-6">
-        <button type="button" (click)="closeDeleteConfirm()">No</button>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- Message View -->
-<div *ngIf="showMessageView == true">
-  <app-jump-page [message] = 'message' [error] = 'error'></app-jump-page>
-</div>

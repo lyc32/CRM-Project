@@ -214,7 +214,7 @@ export class UserTakeTestView implements OnInit
   {
     console.log('[WebSocket] [Re-Open]');
     this.webSocket.close();
-    this.webSocket = new WebSocket('ws://' + document.domain + ':8080/websocket/' + 1);
+    this.webSocket = new WebSocket('ws://' + document.domain + ':8080/websocket/' + this.user.id);
     this.webSocket.onopen = () =>
     {
       console.log('[WebSocket] [Re-Open]');

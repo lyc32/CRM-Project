@@ -43,6 +43,8 @@ export class AdminManageTestView implements OnInit
     showRemoveQuestionConfirmView:boolean = false;
     showDeleteQuestionConfirmView:boolean = false;
 
+    switch_on:string = "input";
+
 
     showMessageView:boolean = false;
     message:string = '';
@@ -56,7 +58,6 @@ export class AdminManageTestView implements OnInit
 
     ngOnInit(): void //TODO add Error=>{}
     {
-
       // @ts-ignore
       this.user = JSON.parse( window.sessionStorage.getItem('MCQuser') );
       this.testId = this.router.snapshot.params['tid'];
@@ -66,12 +67,31 @@ export class AdminManageTestView implements OnInit
             if(data != null)
             {
               this.test = data;
+              if(this.test.state == 'active')
+              {
+                this.switch_on = 'input checked';
+              }
+              else
+              {
+                this.switch_on = 'input';
+              }
               this.getQuestionList();
             }
           }
         )
     }
 
+  swithcButton()
+  {
+    if(this.switch_on == "input")
+    {
+      this.switch_on = "input checked";
+    }
+    else
+    {
+      this.switch_on = "input";
+    }
+  }
 
   getQuestionList() //TODO add Error=>{}
   {
@@ -676,6 +696,14 @@ showDeleteQuestionConfirm(q:Question)
     else
     {
       this.test.level = parseInt(level);
+      if(this.switch_on == 'input checked')
+      {
+        this.test.state = 'active';
+      }
+      else
+      {
+        this.test.state = 'inactive';
+      }
       this.testService.updateTest(this.test)
         .subscribe(
           data   =>

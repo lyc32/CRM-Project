@@ -12,6 +12,10 @@ export class MyAccountView implements OnInit
 
   user:Account = new Account();
 
+  message:string = '';
+  error:string = '';
+  showMessageView:boolean = false;
+
   constructor(private accountService:AccountService)
   {
   }
@@ -22,6 +26,7 @@ export class MyAccountView implements OnInit
     this.user = JSON.parse( window.sessionStorage.getItem('MCQuser') );
   }
 
+/**************************** UPDATE ACCOUNT ****************************/
   update()
   {
     // @ts-ignore
@@ -53,18 +58,30 @@ export class MyAccountView implements OnInit
               this.user.emailId = emailId;
               this.user.phone = phone;
               window.sessionStorage.setItem("MCQuser", JSON.stringify(this.user));
-              window.location.href = this.user.role + "/updateAccount/successful";
+              this.jumpWindow("You Information Has Already Updated", '');
             }
             else
             {
-              window.location.href = this.user.role + "/updateAccount/" + data;
+              this.jumpWindow("Can Not Update You Information", data);
             }
           },
           error =>
           {
-            window.location.href = this.user.role + "/updateAccount/" + error.message;
+            this.jumpWindow("Can Not Update You Information", error);
           })
     }
+  }
+
+/***************************** Massage View *****************************/
+  jumpWindow(message:string, error:string)
+  {
+    this.message = message;
+    this.error = error;
+    this.showMessageView = true;
+    setTimeout(()=>
+    {
+      this.showMessageView = false;
+    }, 5000);
   }
 
 }

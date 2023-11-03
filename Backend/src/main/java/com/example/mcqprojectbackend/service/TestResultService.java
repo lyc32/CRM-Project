@@ -40,9 +40,9 @@ public class TestResultService
         {
             return null;
         }
-        else //TODO change to Lambda
+        else
         {
-            for(int i = 0; i<questionSnapShot.size(); i++)
+            for(int i = 0; i<questionSnapShot.size(); i++) //TODO change to Lambda
             {
                 for(int j=0; j< userAnswers.length; j++)
                 {
@@ -58,12 +58,10 @@ public class TestResultService
                         {
                             userAnswers[j].setIsCorrect("No");
                         }
-                        System.out.println(questionSnapShot.get(i).getAnswer() + "->" + userAnswers[i].getUserAnswer());
                         break;
                     }
                 }
             }
-
             TestResult testResult= new TestResult();
             testResult.setUserId(uid);
             testResult.setTest(testSnapShot);
@@ -83,7 +81,6 @@ public class TestResultService
                 String content = "The Test Result For ID:" + uid + "\n\r" + testTopic + "\n\r"+ testName + "\n\rGrade: "+ point + "/" + totalPoint;
 
                 mailClient.sendMail(memoryDB.adminEmail,"[TestResult]["+testName+"]",content);
-                //mailClient.sendMail(memoryDB.adminEmail,"[TestResult]["+testSnapShot.getName()+"]","The Test Result For ID:" + uid + "\n" + testSnapShot.getTopic() + "\n"+testSnapShot.getName() + "\nGrade: "+ point + "/" + totalPoint);
             }
             catch (Exception e)
             {

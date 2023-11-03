@@ -21,7 +21,7 @@ export class UserTestListView implements OnInit
   {
     // @ts-ignore
     this.user = JSON.parse( window.sessionStorage.getItem('MCQuser') );
-    this.testService.getAllTest()
+    this.testService.getAllActiveTest()
       .subscribe(
         data =>
         {

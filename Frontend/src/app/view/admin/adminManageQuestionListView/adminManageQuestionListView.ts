@@ -457,7 +457,7 @@ export class AdminManageQuestionListView implements OnInit
 
   addCurrentChoice()
   {
-    this.currentChoiceList.push(this.choiceList.length.toString());
+    this.currentChoiceList.push(this.currentChoiceList.length.toString());
   }
 
   removeCurrentChoice(i:number)

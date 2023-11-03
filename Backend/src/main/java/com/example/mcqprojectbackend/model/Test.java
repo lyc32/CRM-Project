@@ -16,19 +16,24 @@ public class Test
     private String name;
     @Column(name = "level")
     private Integer level;
+    @Column(name = "state")
+    private String state;
     @Column(name = "create_time")
     private String createTime;
     @Column(name = "update_time")
     private String updateTime;
 
+
     public Test()
     {
     }
-    public Test(Long id, String topic, String name, Integer level, String createTime, String updateTime) {
+
+    public Test(Long id, String topic, String name, Integer level, String state, String createTime, String updateTime) {
         this.id = id;
         this.topic = topic;
         this.name = name;
         this.level = level;
+        this.state = state;
         this.createTime = createTime;
         this.updateTime = updateTime;
     }
@@ -81,6 +86,14 @@ public class Test
         this.updateTime = updateTime;
     }
 
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
     public void update(Test test)
     {
         if(test.getTopic() != null)
@@ -94,6 +107,10 @@ public class Test
         if(test.getLevel() != null)
         {
             this.level = test.getLevel();
+        }
+        if(test.getState() != null)
+        {
+            this.state = test.getState();
         }
     }
 

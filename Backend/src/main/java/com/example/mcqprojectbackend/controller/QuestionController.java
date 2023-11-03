@@ -45,6 +45,12 @@ public class QuestionController
         return questionService.getAllQuestion();
     }
 
+    @GetMapping("/admin/getQuestionById/{id}")
+    public Question getQuestionById(@PathVariable Long id)
+    {
+        return questionService.getQuestionById(id);
+    }
+
     @GetMapping("/admin/addQuestion/{qid}/toTest/{sid}")
     public String addQuestionToSet(@PathVariable Long qid, @PathVariable Long sid)
     {

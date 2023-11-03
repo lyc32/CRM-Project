@@ -1,5 +1,6 @@
 package com.example.mcqprojectbackend.controller;
 
+import com.example.mcqprojectbackend.model.Question;
 import com.example.mcqprojectbackend.model.Test;
 import com.example.mcqprojectbackend.service.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ public class TestController
     @GetMapping("/user/getAllTest")
     public List<Test> userGetAllTest()
     {
-        return testService.getAllTest();
+        return testService.getAllActiveTest();
     }
 
     @GetMapping("/user/getTestById/{id}")
@@ -45,10 +46,10 @@ public class TestController
         return testService.getTestByQuestionId(id);
     }
 
-    @GetMapping("/admin/getTestWithoutQuestionId")
-    public List<Test> getTestWithoutQuestionId(Long id)
+    @GetMapping("/admin/getTestWithoutQuestionId/{qid}")
+    public List<Test> getTestWithoutQuestionId(@PathVariable Long qid)
     {
-        return testService.getTestWithoutQuestionId(id);
+        return testService.getTestWithoutQuestionId(qid);
     }
 
     @PostMapping("/admin/addNewTest")
@@ -56,6 +57,13 @@ public class TestController
     {
         return testService.addNewTopic(test);
     }
+
+    @PostMapping("/admin/addNewTestToQuestion/{qid}")
+    public String addNewSetToQuestion(@PathVariable Long qid, @RequestBody Test test)
+    {
+        return testService.addNewSetToQuestion(qid,test);
+    }
+
 
     @PutMapping("/admin/uptateTest/{id}")
     public String updateTest(@PathVariable Long id, @RequestBody Test test)

@@ -1,243 +1,264 @@
-<!-- Account List View-->
-<div *ngIf="showMessageView == false && showCreateAccountView == false">
-  <!-- Search Bar -->
-  <div class="row p-2 ms-2 me-2">
-    <div class="card pb-0"  style="height: 75px;">
-      <div class="row text-center border-bottom">
-        <div class="col-1">
-          <h6>ID</h6>
-        </div>
-        <div class="col-2">
-          <h6>User Name</h6>
-        </div>
-        <div class="col-2">
-          <h6>Email ID</h6>
-        </div>
-        <div class="col-2">
-          <h6>Phone</h6>
-        </div>
-        <div class="col-3">
-          <h6>Level</h6>
-        </div>
-        <div class="col-1">
-          <h6>role</h6>
-        </div>
-        <div class="col-1">
-          <h4 style="text-align:center;height: 20px; color:#4CAF50" (click)="showCreateAccount()"><i class="bi bi-plus-square"></i></h4>
-        </div>
-      </div>
-      <div class="row  mt-1 mb-1" style="height: 50px">
-        <div class="col-1 mt-0">
-          <input type="number" class="form-control mt-1" id="id" style="height: 50%;" value="{{searchCondition.id}}">
-        </div>
-        <div class="col-2">
-          <input type="text" class="form-control mt-1" id="userName" style="height: 50%;" value="{{searchCondition.userName}}">
-        </div>
-        <div class="col-2">
-          <input type="text" class="form-control mt-1" id="emailId" style="height: 50%;" value="{{searchCondition.emailId}}">
-        </div>
-        <div class="col-2">
-          <input type="text" class="form-control mt-1" id="phone" style="height: 50%;" value="{{searchCondition.phone}}">
-        </div>
-        <div class="col-3 ">
-          <label class="ms-2 me-2">From</label><input type="number" class="form-control mt-1" style="width:35%;height: 50%;" id="minLevel" value="{{searchCondition.minLevel}}">
-          <label class="ms-2 me-2">To  </label><input type="number" class="form-control mt-1" style="width:35%;height: 50%;" id="maxLevel" value="{{searchCondition.maxLevel}}">
-        </div>
-        <div class="col-1">
-          <select id="role" class="form-control mt-1 pt-0" style="height: 50%;" value="{{searchCondition.role}}">
-            <option value="user" >user</option>
-            <option value="admin">admin</option>
-            <option value="super">super</option>
-          </select>
-        </div>
-        <div class="col-1">
-          <button class="form-control btn btn-primary mt-0" (click)="search()">Search</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- Account List-->
-  <div class="row mt-2 ms-2 me-2">
-    <!-- Account List-->
-    <div class="col-8">
-      <div class="card"  style="height: 470px; overflow: auto">
-        <div class="row mt-2 ms-2 text-center border-bottom" style="height: 32px;">
+<div *ngIf="user.role=='admin' || user.role == 'super'">
+  <!-- Account List View-->
+  <div *ngIf="showMessageView == false && showCreateAccountView == false">
+    <!-- Search Bar -->
+    <div class="row p-2 ms-2 me-2">
+      <div class="card pb-0"  style="height: 75px;">
+        <div class="row text-center border-bottom">
           <div class="col-1">
             <h6>ID</h6>
           </div>
           <div class="col-2">
             <h6>User Name</h6>
           </div>
-          <div class="col-3">
+          <div class="col-2">
             <h6>Email ID</h6>
           </div>
-          <div class="col-3">
+          <div class="col-2">
             <h6>Phone</h6>
           </div>
-          <div class="col-1">
+          <div class="col-3">
             <h6>Level</h6>
           </div>
           <div class="col-1">
             <h6>role</h6>
           </div>
           <div class="col-1">
+            <h4 style="text-align:center;height: 20px; color:#4CAF50" (click)="showCreateAccount()"><i class="bi bi-plus-square"></i></h4>
           </div>
         </div>
-        <div class="row mt-2 ms-2 text-center border-bottom" style="height: 32px;" *ngFor="let account of accountList">
-          <div class="col-1">
-            {{account.id}}
+        <div class="row  mt-1 mb-1" style="height: 50px">
+          <div class="col-1 mt-0">
+            <input type="number" class="form-control mt-1" id="id" style="height: 50%;" value="{{searchCondition.id}}">
           </div>
           <div class="col-2">
-            {{account.userName}}
+            <input type="text" class="form-control mt-1" id="userName" style="height: 50%;" value="{{searchCondition.userName}}">
           </div>
-          <div class="col-3">
-            {{account.emailId}}
+          <div class="col-2">
+            <input type="text" class="form-control mt-1" id="emailId" style="height: 50%;" value="{{searchCondition.emailId}}">
           </div>
-          <div class="col-3">
-            {{account.phone}}
+          <div class="col-2">
+            <input type="text" class="form-control mt-1" id="phone" style="height: 50%;" value="{{searchCondition.phone}}">
+          </div>
+          <div class="col-3 ">
+            <label class="ms-2 me-2">From</label><input type="number" class="form-control mt-1" style="width:35%;height: 50%;" id="minLevel" value="{{searchCondition.minLevel}}">
+            <label class="ms-2 me-2">To  </label><input type="number" class="form-control mt-1" style="width:35%;height: 50%;" id="maxLevel" value="{{searchCondition.maxLevel}}">
           </div>
           <div class="col-1">
-            {{account.level}}
+            <select id="role" class="form-control mt-1 pt-0" style="height: 50%;" value="{{searchCondition.role}}">
+              <option value="user" >user</option>
+              <option value="admin">admin</option>
+              <option value="super">super</option>
+            </select>
           </div>
           <div class="col-1">
-            {{account.role}}
-          </div>
-          <div class="col-1 pe-3">
-            <button class="btn btn-sm btn-outline-primary py-0 mt-0 pb-0" (click)="showAccountDetail(account)">-></button>
+            <button class="form-control btn btn-primary mt-0" (click)="search()">Search</button>
           </div>
         </div>
       </div>
     </div>
-    <!-- Account Detail-->
-    <div class="col-4">
-      <div class="card"  style="height: 460px;">
-        <!-- Current Account is NULL -->
-        <div class="justify-content-center text-center" *ngIf="currentAccount.id < 0">
-          <h1 class="m-5 text-secondary">No Data</h1>
+    <!-- Account List-->
+    <div class="row mt-2 ms-2 me-2">
+      <!-- Account List-->
+      <div class="col-8">
+        <div class="card"  style="height: 470px; overflow: auto">
+          <div class="row mt-2 ms-2 text-center border-bottom" style="height: 32px;">
+            <div class="col-1">
+              <h6>ID</h6>
+            </div>
+            <div class="col-2">
+              <h6>User Name</h6>
+            </div>
+            <div class="col-3">
+              <h6>Email ID</h6>
+            </div>
+            <div class="col-3">
+              <h6>Phone</h6>
+            </div>
+            <div class="col-1">
+              <h6>Level</h6>
+            </div>
+            <div class="col-1">
+              <h6>role</h6>
+            </div>
+            <div class="col-1">
+            </div>
+          </div>
+          <div class="row mt-2 ms-2 text-center border-bottom" style="height: 32px;" *ngFor="let account of accountList">
+            <div class="col-1">
+              {{account.id}}
+            </div>
+            <div class="col-2">
+              {{account.userName}}
+            </div>
+            <div class="col-3">
+              {{account.emailId}}
+            </div>
+            <div class="col-3">
+              {{account.phone}}
+            </div>
+            <div class="col-1">
+              {{account.level}}
+            </div>
+            <div class="col-1">
+              {{account.role}}
+            </div>
+            <div class="col-1 pe-3">
+              <button class="btn btn-sm btn-outline-primary py-0 mt-0 pb-0" (click)="showAccountDetail(account)">-></button>
+            </div>
+          </div>
         </div>
-        <!-- Current Account Detail -->
-        <div *ngIf="currentAccount.id >= 0">
-          <div class="row mt-3 ms-2 me-2">
-            <div class="col-6">
-              <label><b>User Name</b></label>
-              <input type="text" id="currentUserName" value="{{currentAccount.userName}}" readonly>
-            </div>
-            <div class="col-6">
-              <label><b>Account Type</b></label>
-              <input type="text" id="currentRole" value="{{currentAccount.role}}" readonly>
-            </div>
+      </div>
+      <!-- Account Detail-->
+      <div class="col-4">
+        <div class="card"  style="height: 460px;">
+          <!-- Current Account is NULL -->
+          <div class="justify-content-center text-center" *ngIf="currentAccount.id < 0">
+            <h1 class="m-5 text-secondary">No Data</h1>
           </div>
-
-          <div class="row mt-2 ms-2 me-2" *ngIf="showDeleteConfirmView == false && showResetPasswordView == false">
-            <div class="col-6">
-              <label><b>Level</b></label>
-              <input type="number" id="currentLevel" value="{{currentAccount.level}}" required>
-            </div>
-            <div class="col-12">
-              <label><b>Email Id</b></label>
-              <input type="text" id="currentEmailId" placeholder="Email ID" value="{{currentAccount.emailId}}" required>
-            </div>
-            <div class="col-12">
-              <label><b>Phone Number</b></label>
-              <input type="text" id="currentPhone"   placeholder="Phone Number"  value="{{currentAccount.phone}}" required>
-            </div>
-            <div class="col-3">
-              <button type="button" class="btn btn-sm btn-primary py-2"   (click)="viewAccountDetail()">View</button>
-            </div>
-            <div class="col-3">
-              <button type="button" class="btn btn-sm btn-success py-2"   (click)="updateAccount()"    >Update</button>
-            </div>
-            <div class="col-3">
-              <button type="button" class="btn btn-sm btn-secondary py-2" (click)="showResetPassword()">Password</button>
-            </div>
-            <div class="col-3">
-              <button type="button" class="btn btn-sm btn-danger py-2"    (click)="showDeleteConfirm()">Delete</button>
-            </div>
-          </div>
-
-          <div class="row mt-2 ms-2 me-2" *ngIf="showDeleteConfirmView == true">
-            <div class="card mt-4">
-              <div class="row text-center mt-4">
-                <label class="h4"><b>Are You Sure To Delete This Account?</b></label>
+          <!-- Current Account Detail -->
+          <div *ngIf="currentAccount.id >= 0">
+            <div class="row mt-3 ms-2 me-2">
+              <div class="col-6">
+                <label><b>User Name</b></label>
+                <input type="text" id="currentUserName" value="{{currentAccount.userName}}" readonly>
               </div>
-              <div class="row">
-                <div class="col-6">
-                  <button type="button" style="background-color: #C44336" (click)="deleteAccount()">Yes</button>
-                </div>
-                <div class="col-6">
-                  <button type="button" (click)="closeDeleteConfirm()">No</button>
-                </div>
+              <div class="col-6">
+                <label><b>Account Type</b></label>
+                <input type="text" id="currentRole" value="{{currentAccount.role}}" readonly>
               </div>
             </div>
-          </div>
 
-          <div class="row mt-2 ms-2 me-2" *ngIf="showResetPasswordView == true">
-            <div class="card mt-4">
-              <div class="row text-center mt-4">
-                <label><h4>Reset Password</h4></label>
-                <div class="col-12">
-                  <input type="text" id="newPassword" placeholder="Password" required>
+            <div class="row mt-2 ms-2 me-2" *ngIf="showDeleteConfirmView == false && showResetPasswordView == false">
+              <div class="col-6">
+                <label><b>Level</b></label>
+                <input type="number" id="currentLevel" value="{{currentAccount.level}}" required>
+              </div>
+              <div class="col-12">
+                <label><b>Email Id</b></label>
+                <input type="text" id="currentEmailId" placeholder="Email ID" value="{{currentAccount.emailId}}" required>
+              </div>
+              <div class="col-12">
+                <label><b>Phone Number</b></label>
+                <input type="text" id="currentPhone"   placeholder="Phone Number"  value="{{currentAccount.phone}}" required>
+              </div>
+              <div class="row pe-0" *ngIf="user.role=='super'">
+                <div class="col-3">
+                  <button type="button" class="btn btn-sm btn-primary py-2"   (click)="viewAccountDetail()" *ngIf="currentAccount.role=='user'">View</button>
                 </div>
-                <div class="col-12">
-                  <input type="text" id="newConfirm"   placeholder="Confirm" required>
+                <div class="col-3">
+                  <button type="button" class="btn btn-sm btn-success py-2"   (click)="updateAccount()"    >Update</button>
+                </div>
+                <div class="col-3">
+                  <button type="button" class="btn btn-sm btn-secondary py-2" (click)="showResetPassword()">Password</button>
+                </div>
+                <div class="col-3">
+                  <button type="button" class="btn btn-sm btn-danger py-2"    (click)="showDeleteConfirm()">Delete</button>
                 </div>
               </div>
-              <div class="row">
-                <div class="col-6">
-                  <button type="button" style="background-color: #C44336" (click)="resetPassword()">Reset</button>
+              <div class="row pe-0" *ngIf="user.role=='admin'">
+                <div class="col-3">
+                  <button type="button" class="btn btn-sm btn-primary py-2"   (click)="viewAccountDetail()" *ngIf="currentAccount.role=='user'">View</button>
                 </div>
-                <div class="col-6">
-                  <button type="button" (click)="closeResetPassword()">Cancel</button>
+                <div class="col-3">
+                  <button type="button" class="btn btn-sm btn-success py-2"   (click)="updateAccount()"    *ngIf="currentAccount.role=='user' || currentAccount.role=='admin'">Update</button>
+                </div>
+                <div class="col-3">
+                  <button type="button" class="btn btn-sm btn-secondary py-2" (click)="showResetPassword()" *ngIf="currentAccount.role=='user' || currentAccount.role=='admin'">Password</button>
+                </div>
+                <div class="col-3">
+                  <button type="button" class="btn btn-sm btn-danger py-2"    (click)="showDeleteConfirm()" *ngIf="currentAccount.role=='user' || currentAccount.role=='admin'">Delete</button>
                 </div>
               </div>
             </div>
-            <div id="error"></div>
-          </div>
 
+            <div class="row mt-2 ms-2 me-2" *ngIf="showDeleteConfirmView == true">
+              <div class="card mt-4">
+                <div class="row text-center mt-4">
+                  <label class="h4"><b>Are You Sure To Delete This Account?</b></label>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    <button type="button" style="background-color: #C44336" (click)="deleteAccount()">Yes</button>
+                  </div>
+                  <div class="col-6">
+                    <button type="button" (click)="closeDeleteConfirm()">No</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row mt-2 ms-2 me-2" *ngIf="showResetPasswordView == true">
+              <div class="card mt-4">
+                <div class="row text-center mt-4">
+                  <label><h4>Reset Password</h4></label>
+                  <div class="col-12">
+                    <input type="text" id="newPassword" placeholder="Password" required>
+                  </div>
+                  <div class="col-12">
+                    <input type="text" id="newConfirm"   placeholder="Confirm" required>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    <button type="button" style="background-color: #C44336" (click)="resetPassword()">Reset</button>
+                  </div>
+                  <div class="col-6">
+                    <button type="button" (click)="closeResetPassword()">Cancel</button>
+                  </div>
+                </div>
+              </div>
+              <div id="error"></div>
+            </div>
+
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- Create Account View -->
-<div *ngIf="showCreateAccountView == true && showMessageView == false">
-  <div class="modal-content animate container mt-4" style="width: 600px">
-    <div class="row">
-      <div class="col-2 text-center">
-        <button (click)="closeCreateAccount()">Back</button>
+  <!-- Create Account View -->
+  <div *ngIf="showCreateAccountView == true && showMessageView == false">
+    <div class="modal-content animate container mt-4" style="width: 600px">
+      <div class="row">
+        <div class="col-2 text-center">
+          <button (click)="closeCreateAccount()">Back</button>
+        </div>
+        <div class="col-8 text-center">
+          <h2 style="text-align:center;margin:20px 0 5px;">Create Account</h2>
+        </div>
       </div>
-      <div class="col-8 text-center">
-        <h2 style="text-align:center;margin:20px 0 5px;">Create Account</h2>
+      <div class="row mt-4">
+        <label><b>Account Type</b></label>
+        <select type="text"     id="newAccountRole">
+          <option value="user" >user</option>
+          <option value="admin">admin</option>
+          <option value="super" *ngIf="user.role == 'super'">super</option>
+        </select>
+        <label><b>Email ID</b></label>
+        <input type="text"     id="newAccountEmailId"  value="{{newAccount.emailId}}" required>
+        <label><b>Password</b></label>
+        <input type="password" id="newAccountPassword" value="{{newAccount.password}}" required>
+        <label><b>Confirm</b></label>
+        <input type="password" id="newAccountConfirm"  value="" required>
       </div>
-    </div>
-    <div class="row mt-4">
-      <label><b>Account Type</b></label>
-      <select type="text"     id="newAccountRole">
-        <option value="user" >user</option>
-        <option value="admin">admin</option>
-        <option value="super">super</option>
-      </select>
-      <label><b>Email ID</b></label>
-      <input type="text"     id="newAccountEmailId"  value="{{newAccount.emailId}}" required>
-      <label><b>Password</b></label>
-      <input type="password" id="newAccountPassword" value="{{newAccount.password}}" required>
-      <label><b>Confirm</b></label>
-      <input type="password" id="newAccountConfirm"  value="" required>
-    </div>
 
-    <div class="row justify-content-end">
-      <div class="col-9">
-        <div id="errorMessage"></div>
-      </div>
-      <div class="col-3">
-        <button type="button" (click)="createAccount()">Submit</button>
+      <div class="row justify-content-end">
+        <div class="col-9">
+          <div id="errorMessage"></div>
+        </div>
+        <div class="col-3">
+          <button type="button" (click)="createAccount()">Submit</button>
+        </div>
       </div>
     </div>
   </div>
+
+  <!-- Message View -->
+  <div *ngIf="showMessageView == true">
+    <app-jump-page [message] = 'message' [error] = 'error'></app-jump-page>
+  </div>
 </div>
 
-<!-- Message View -->
-<div *ngIf="showMessageView == true">
-  <app-jump-page [message] = 'message' [error] = 'error'></app-jump-page>
-</div>
+
+

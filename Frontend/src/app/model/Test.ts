@@ -4,6 +4,7 @@ export class Test
   topic       :string = '';
   name        :string = '';
   level       :number = -1;
+  state       :string = 'inactive';
   createTime  :string = '';
   updateTime  :string = '';
 }

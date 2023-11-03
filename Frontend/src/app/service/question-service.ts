@@ -75,7 +75,6 @@ export class QuestionService
     return this.httpClient.post<Question[]>('http://localhost:8080/api/v1/admin/search/question/notInAllTest', params);
   }
 
-
   addNewQuestion(question:Question):Observable<Question>
   {
     const httpHeaders = new HttpHeaders().set('Content-Type', 'application/json');

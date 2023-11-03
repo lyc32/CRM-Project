@@ -9,6 +9,7 @@ import com.example.mcqprojectbackend.model.QuestionToTest;
 import com.example.mcqprojectbackend.model.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
@@ -53,6 +54,19 @@ public class QuestionService
     public List<Question> getAllQuestion()
     {
         return questionRepository.findAll();
+    }
+
+    @Transactional
+    public Question getQuestionById(@PathVariable Long id)
+    {
+        Optional<Question> optionalQuestion = questionRepository.findById(id);
+        if(optionalQuestion.isEmpty())
+        {
+            return null;
+        }
+        else{
+            return optionalQuestion.get();
+        }
     }
 
     @Transactional
@@ -121,7 +135,7 @@ public class QuestionService
             SimpleDateFormat sdf = new SimpleDateFormat();
             sdf.applyPattern("yyyy-MM-dd HH:mm:ss");
             Date date = new Date();
-            question.setUpdateTime(sdf.format(date));
+            tmp.setUpdateTime(sdf.format(date));
             questionRepository.save(tmp);
             return "success";
         }

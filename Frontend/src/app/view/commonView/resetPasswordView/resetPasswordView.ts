@@ -10,6 +10,9 @@ import {AccountService} from "../../../service/account-service";
 export class ResetPasswordView implements OnInit
 {
   user:Account = new Account();
+  message:string = '';
+  error:string = '';
+  showMessageView:boolean = false;
 
   constructor(private accountService:AccountService)
   {
@@ -21,6 +24,7 @@ export class ResetPasswordView implements OnInit
     this.user = JSON.parse( window.sessionStorage.getItem('MCQuser') );
   }
 
+/**************************** RESET PASSWORD ****************************/
   resetPassword()
   {
     let oldPassword     = (document.getElementById("oldPassword") as HTMLInputElement).value;
@@ -54,19 +58,30 @@ export class ResetPasswordView implements OnInit
             {
               this.user.password = newPassword;
               window.sessionStorage.setItem("MCQuser", JSON.stringify(this.user));
-              window.location.href = this.user.role + "/resetPassword/successful";
+              this.jumpWindow("Reset Password Successful", '');
             }
             else
             {
-              // @ts-ignore
-              document.getElementById("message").innerHTML = '<div class="text-bg-danger h6 m-2">'+data+'</div>';
+              this.jumpWindow("Reset Password Failed", data);
             }
           },
           error =>
           {
-            window.location.href = this.user.role + "/updateAccount/" + error.message;
+            this.jumpWindow("Reset Password Failed", error.message);
           })
     }
+  }
+
+/***************************** Massage View *****************************/
+  jumpWindow(message:string, error:string)
+  {
+    this.message = message;
+    this.error = error;
+    this.showMessageView = true;
+    setTimeout(()=>
+    {
+      this.showMessageView = false;
+    }, 5000);
   }
 
 }

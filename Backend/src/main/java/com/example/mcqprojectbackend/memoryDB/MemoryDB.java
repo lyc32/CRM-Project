@@ -7,7 +7,7 @@ import com.example.mcqprojectbackend.model.UserState;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.*;
 
-public class MemoryDB
+public class MemoryDB // TODO change to any memory DB.
 {
     public static String adminEmail = "liyc930826@gmail.com";
     public static ConcurrentHashMap<Long, List<Question>>  questionListSnapShot = new ConcurrentHashMap<>();

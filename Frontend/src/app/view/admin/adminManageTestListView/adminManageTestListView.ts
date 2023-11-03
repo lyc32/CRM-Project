@@ -28,6 +28,8 @@ export class AdminManageTestListView
   showNewTestView:boolean = false;
   showMessageView:boolean = false;
 
+  switch_on:string = "input";
+
   constructor(private testService:TestService, private topicService:TopicService)
   {
   }
@@ -114,8 +116,28 @@ export class AdminManageTestListView
   showTestDetail(test:Test)
   {
     this.currentTest = test;
+    if(this.currentTest.state == 'active')
+    {
+      this.switch_on = "input checked";
+    }
+    else
+    {
+      this.switch_on = "input";
+    }
   }
 
+  swithcButton()
+  {
+    console.log("clicked");
+    if(this.switch_on == "input")
+    {
+      this.switch_on = "input checked";
+    }
+    else
+    {
+      this.switch_on = "input";
+    }
+  }
 
 /***************************** CREATE TEST ******************************/
   showAddTest()
@@ -248,6 +270,14 @@ export class AdminManageTestListView
     else
     {
       this.currentTest.level = parseInt(level);
+      if(this.switch_on == 'input checked')
+      {
+        this.currentTest.state = 'active';
+      }
+      else
+      {
+        this.currentTest.state = 'inactive';
+      }
       this.testService.updateTest(this.currentTest)
         .subscribe(
           data   =>
