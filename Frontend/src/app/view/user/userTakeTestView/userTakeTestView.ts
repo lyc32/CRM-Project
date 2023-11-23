@@ -161,7 +161,7 @@ export class UserTakeTestView implements OnInit
 
   setWebSocketServer(): void
   {
-    this.webSocket = new WebSocket('ws://' + document.domain + ':8080/websocket/' + 1);
+    this.webSocket = new WebSocket('ws://' + document.domain + ':8080/websocket/' + this.user.id);
 
     this.webSocket.onopen = () =>
     {
@@ -331,25 +331,23 @@ export class UserTakeTestView implements OnInit
 
   autoSave()
   {
+    this.userState.userAnswerList[this.currentQuestionIndex] = new UserAnswer();
+    this.userState.userAnswerList[this.currentQuestionIndex].qid = this.currentQuestion.id;
     if(this.currentQuestion.style != 'Short Answer')
     {
       let answer:string[] = new Array();
       for(let i=0; i < this.currentQuestionChoices.length; i++)
       {
-        if((document.getElementById("selectedChoice" + i) as HTMLInputElement).checked == true)
+        if((document.getElementById("selectedChoice" + i) as HTMLInputElement)!= null && (document.getElementById("selectedChoice" + i) as HTMLInputElement).checked == true)
         {
           // @ts-ignore
           answer.push(this.currentQuestionChoices[i]);
         }
       }
-      this.userState.userAnswerList[this.currentQuestionIndex] = new UserAnswer();
-      this.userState.userAnswerList[this.currentQuestionIndex].qid = this.currentQuestion.id;
       this.userState.userAnswerList[this.currentQuestionIndex].userAnswer = btoa(JSON.stringify(answer));
     }
     else
     {
-      this.userState.userAnswerList[this.currentQuestionIndex] = new UserAnswer();
-      this.userState.userAnswerList[this.currentQuestionIndex].qid = this.currentQuestion.id;
       this.userState.userAnswerList[this.currentQuestionIndex].userAnswer = (document.getElementById("currentAnswer") as HTMLTextAreaElement).value
     }
     window.sessionStorage.setItem("MCQtestState", JSON.stringify(this.userState));
@@ -357,6 +355,7 @@ export class UserTakeTestView implements OnInit
 
   submit()
   {
+    this.autoSave();
     this.webSocket.send(this.getCurrentTime());
     this.webSocket.close();
     clearInterval(this.websocketSendMessageInterval);

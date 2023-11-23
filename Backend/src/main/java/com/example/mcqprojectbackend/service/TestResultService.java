@@ -72,8 +72,12 @@ public class TestResultService
             ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
             try
             {
-                testResult.setQuestionlist(ow.writeValueAsString(questionSnapShot));
-                testResult.setUserAnswerList(ow.writeValueAsString(userAnswers));
+                // TODO
+                // Questionlist and UserAnswerList are too short to save save all test data.
+                //System.out.println(ow.writeValueAsString(questionSnapShot));
+                //System.out.println(ow.writeValueAsString(userAnswers));
+                //testResult.setQuestionlist(ow.writeValueAsString(questionSnapShot));
+                //testResult.setUserAnswerList(ow.writeValueAsString(userAnswers));
                 testResultRepository.save(testResult);
 
                 String testName = testSnapShot.getName();
@@ -97,7 +101,7 @@ public class TestResultService
                 else
                 {
                     Account tmp = optionalAccount.get();
-                    if(tmp.getLevel() < testSnapShot.getLevel())
+                    if((tmp.getLevel() == null) || (tmp.getLevel() < testSnapShot.getLevel()))
                     {
                         tmp.setLevel(testSnapShot.getLevel());
                         accountRepository.save(tmp);

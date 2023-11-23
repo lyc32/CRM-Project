@@ -188,8 +188,9 @@ export class AdminManageTestListView
             if (data != null)
             {
               this.reload();
+              this.currentTest = data;
+              this.switch_on = 'input';
               this.newTest = new Test();
-              this.currentTest = new Test();
               this.showAddTestView = false;
               this.showNewTestView = true;
             }

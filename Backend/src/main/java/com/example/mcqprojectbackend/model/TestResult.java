@@ -20,9 +20,9 @@ public class TestResult
     private String testTopic;
     @Column(name = "test_Level")
     private Integer testLevel;
-    @Column(name = "user_answer_list", length = 10000)
+    @Column(name = "user_answer_list") // TODO
     private String userAnswerList; // json
-    @Column(name = "question_list", length = 10000)
+    @Column(name = "question_list") // TODO
     private String questionlist; // json
     @Column(name = "total_points")
     private Integer totalPoints;

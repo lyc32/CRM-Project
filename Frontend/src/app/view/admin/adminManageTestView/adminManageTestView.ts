@@ -35,7 +35,7 @@ export class AdminManageTestView implements OnInit
     checkbox:boolean = false;
 
 
-  showCreateNewQuestionView:boolean = false;
+    showCreateNewQuestionView:boolean = false;
     showEditQuestionView:boolean = false;
     showAddExistQuesitonView:boolean = false;
     showExistCurrentQuestionView:boolean = false;
